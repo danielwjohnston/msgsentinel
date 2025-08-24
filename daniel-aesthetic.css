@@ -41,7 +41,7 @@
   --size-600: 1.25rem;
   --size-500: 1.125rem;
   --size-400: 1rem;
-  --size-300: .925rem;
+  --size-300: .9375rem;
   --size-200: .875rem;
 
   /* Layout */
@@ -52,7 +52,7 @@
   --gap-4: 2rem;
 }
 
-/* Optional alt-palette (earthy Bauhaus). Toggle by adding .theme-earth on <html> or a wrapper.
+/* Optional alt-palette (earthy Bauhaus). Toggle by adding .theme-earth on <html> or a wrapper. */
 .theme-earth {
   --accent: #b4a16a;        /* olive-gold */
   --accent-700: #8a7f4f;
@@ -60,7 +60,6 @@
   --success: #6fa07a;       /* sage */
   --warn: #d88a2f;          /* terracotta */
 }
-*/
 
 /* ---------- Base ---------- */
 *,
@@ -107,7 +106,10 @@ h1, h2, h3, h4 {
   letter-spacing: -0.02em;
   line-height: 1.15;
   margin: 0 0 .6em;
-  text-wrap: balance;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+  /* text-wrap: pretty; */ /* Removed for better browser compatibility */
 }
 h1 { font-size: var(--size-900); }
 h2 { font-size: var(--size-800); }
@@ -146,14 +148,17 @@ p, ul, ol { font-size: var(--size-400); color: var(--text); }
 }
 .surface-elevated {
   background: linear-gradient(180deg, var(--surface-2), var(--surface-3));
-  border: 1px solid color-mix(in oklab, var(--line) 80%, var(--accent) 5%);
+  border: 1px solid var(--accent);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-soft), var(--shadow-glow);
 }
 
 /* ---------- Card ---------- */
 .card {
-  composes: surface;
+  background: linear-gradient(180deg, var(--surface), var(--surface-2));
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
   padding: clamp(1rem, 2.5vw, 1.5rem);
 }
 .card header {
@@ -211,10 +216,27 @@ p, ul, ol { font-size: var(--size-400); color: var(--text); }
   border-radius: var(--radius);
   transition: border-color var(--dur-1) var(--ease), box-shadow var(--dur-1) var(--ease);
 }
-.input::placeholder, .textarea::placeholder { color: color-mix(in oklab, var(--muted) 85%, #fff); }
+/* Fallback for older browsers */
+.input::placeholder, .textarea::placeholder {
+  color: var(--muted);
+}
+
+/* Modern browsers with color-mix support */
+@supports (color: color-mix(in oklab, #000, #fff)) {
+  .input::placeholder, .textarea::placeholder {
+    color: color-mix(in oklab, var(--muted) 85%, #fff);
+  }
+}
 .input:focus, .select:focus, .textarea:focus {
-  border-color: color-mix(in oklab, var(--accent) 60%, var(--line));
+  border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(0,255,0,.18);
+}
+
+/* Modern browsers with color-mix support */
+@supports (border-color: color-mix(in oklab, #000, #fff)) {
+  .input:focus, .select:focus, .textarea:focus {
+    border-color: color-mix(in oklab, var(--accent) 60%, var(--line));
+  }
 }
 
 /* Switch */
@@ -236,15 +258,25 @@ p, ul, ol { font-size: var(--size-400); color: var(--text); }
   transition: transform var(--dur-1) var(--ease), background var(--dur-1) var(--ease);
 }
 .switch[aria-checked="true"] {
-  background: color-mix(in oklab, var(--accent) 35%, var(--surface-2));
-  border-color: color-mix(in oklab, var(--accent) 60%, var(--line));
+  background: var(--accent);
+  border-color: var(--accent);
   box-shadow: var(--shadow-glow);
+}
+
+/* Modern browsers with color-mix support */
+@supports (background: color-mix(in oklab, #000, #fff)) {
+  .switch[aria-checked="true"] {
+    background: color-mix(in oklab, var(--accent) 35%, var(--surface-2));
+    border-color: color-mix(in oklab, var(--accent) 60%, var(--line));
+  }
 }
 .switch[aria-checked="true"]::after { transform: translateX(calc(var(--w) - var(--h))); background: var(--accent); }
 
 /* ---------- Navigation ---------- */
 .navbar {
-  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  background: var(--bg);
   background: color-mix(in oklab, var(--bg) 80%, transparent);
   border-bottom: 1px solid var(--line);
 }
@@ -272,8 +304,17 @@ p, ul, ol { font-size: var(--size-400); color: var(--text); }
   color: var(--muted);
 }
 .badge.accent {
-  border-color: color-mix(in oklab, var(--accent) 60%, var(--line));
-  color: #001400; background: color-mix(in oklab, var(--accent) 22%, var(--surface-2));
+  border-color: var(--accent);
+  color: #001400;
+  background: var(--accent);
+}
+
+/* Modern browsers with color-mix support */
+@supports (background: color-mix(in oklab, #000, #fff)) {
+  .badge.accent {
+    border-color: color-mix(in oklab, var(--accent) 60%, var(--line));
+    background: color-mix(in oklab, var(--accent) 22%, var(--surface-2));
+  }
 }
 
 /* ---------- Tables ---------- */

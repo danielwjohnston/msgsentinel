@@ -5,197 +5,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MsgSentinel - Protect Yourself from Harmful Messages</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="daniel-aesthetic.css">
     <style>
-        :root {
-            --primary: #4f46e5;
-            --primary-dark: #4338ca;
-            --secondary: #3730a3;
-            --success: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --light: #f9fafb;
-            --dark: #111827;
-            --gray: #6b7280;
-            --light-gray: #e5e7eb;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        /* Custom styles specific to the application */
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: var(--dark);
-            background-color: #f0f2f5;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg);
+            color: var(--text);
         }
         
         .container {
-            max-width: 900px;
-            margin: 2rem auto;
-            padding: 0 1rem;
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
         }
         
+        /* Card styles */
         .card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
             margin-bottom: 2rem;
         }
         
         .card-header {
-            background: var(--primary);
-            color: white;
-            padding: 1.25rem 1.5rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--line);
+        }
+        
+        .card-header h1 {
+            margin: 0;
+            color: var(--accent);
+            font-size: 2rem;
+        }
+        
+        .card-header .subtitle {
+            color: var(--muted);
+            margin-top: 0.5rem;
         }
         
         .card-body {
-            padding: 1.5rem;
+            padding: 2rem;
         }
         
         .card-footer {
-            background: var(--light);
-            padding: 1rem 1.5rem;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 1.5rem 2rem;
+            border-top: 1px solid var(--line);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         
-        h1 {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-        
-        .subtitle {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.95rem;
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--dark);
-        }
-        
-        textarea {
-            width: 100%;
-            min-height: 150px;
-            padding: 1rem;
-            border: 2px solid var(--light-gray);
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 1rem;
-            line-height: 1.5;
-            transition: all 0.2s ease;
-            resize: vertical;
-        }
-        
-        textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
-        }
-        
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.625rem 1.25rem;
-            font-size: 1rem;
-            font-weight: 500;
-            line-height: 1.5;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            background: var(--primary);
-            color: white;
-        }
-        
-        .btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-1px);
-        }
-        
-        .btn:active {
-            transform: translateY(0);
-        }
-        
-        .btn i {
-            margin-right: 0.5rem;
-        }
-        
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--gray);
-            color: var(--gray);
-        }
-        
-        .btn-outline:hover {
-            background: var(--light-gray);
-            color: var(--dark);
-        }
-        
-        .output-box {
-            min-height: 150px;
-            padding: 1.25rem;
-            background: var(--light);
-            border-radius: 8px;
-            border-left: 4px solid var(--primary);
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-        
-        .stats {
-            display: flex;
-            gap: 1.5rem;
-            margin-top: 1rem;
-            color: var(--gray);
-            font-size: 0.875rem;
-        }
-        
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .stat-value {
-            font-weight: 600;
-            color: var(--dark);
-        }
-        
+        /* Tabs */
         .tabs {
             display: flex;
-            border-bottom: 1px solid var(--light-gray);
-            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--line);
+            padding: 0 2rem;
         }
         
         .tab {
-            padding: 0.75rem 1.25rem;
+            padding: 1rem 1.5rem;
             cursor: pointer;
+            color: var(--muted);
             font-weight: 500;
-            color: var(--gray);
-            border-bottom: 2px solid transparent;
-            transition: all 0.2s ease;
+            position: relative;
+            transition: color 0.2s var(--ease);
+        }
+        
+        .tab:after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: transparent;
+            transition: background-color 0.2s var(--ease);
+        }
+        
+        .tab:hover {
+            color: var(--text);
         }
         
         .tab.active {
-            color: var(--primary);
-            border-bottom-color: var(--primary);
+            color: var(--accent);
+        }
+        
+        .tab.active:after {
+            background: var(--accent);
         }
         
         .tab-content {
@@ -206,19 +104,133 @@
             display: block;
         }
         
-        .settings-panel {
-            background: var(--light);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-top: 1.5rem;
+        /* Form elements */
+        .form-group {
+            margin-bottom: 1.5rem;
         }
         
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: var(--surface-2);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+        }
+        
+        textarea:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(0, 255, 0, 0.2);
+        }
+        
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius);
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s var(--ease);
+        }
+        
+        .btn i {
+            margin-right: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            color: var(--bg);
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent-700);
+            transform: translateY(-1px);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+        
+        .btn-outline:hover {
+            background: rgba(0, 255, 0, 0.1);
+        }
+        
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+        
+        /* Stats */
+        .stats {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+        
+        .stat {
+            display: flex;
+            align-items: center;
+        }
+        
+        .stat i {
+            margin-right: 0.5rem;
+            color: var(--accent);
+        }
+        
+        /* History items */
+        .history-item {
+            padding: 1rem;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.2s var(--ease);
+        }
+        
+        .history-item:hover {
+            border-color: var(--accent);
+        }
+        
+        .history-item p {
+            margin: 0 0 0.5rem;
+        }
+        
+        .history-time {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+        
+        /* Settings */
         .setting-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0.75rem 0;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid var(--line);
         }
         
         .setting-item:last-child {
@@ -231,10 +243,11 @@
         
         .setting-description {
             font-size: 0.85rem;
-            color: var(--gray);
+            color: var(--muted);
             margin-top: 0.25rem;
         }
         
+        /* Switch */
         .switch {
             position: relative;
             display: inline-block;
@@ -255,7 +268,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #ccc;
+            background-color: var(--surface-3);
             transition: .4s;
             border-radius: 24px;
         }
@@ -273,72 +286,49 @@
         }
         
         input:checked + .slider {
-            background-color: var(--primary);
+            background-color: var(--accent);
         }
         
         input:focus + .slider {
-            box-shadow: 0 0 1px var(--primary);
+            box-shadow: 0 0 1px var(--accent);
         }
         
         input:checked + .slider:before {
             transform: translateX(20px);
         }
         
-        .empty-state {
-            text-align: center;
-            padding: 3rem 1rem;
-            color: var(--gray);
-        }
-        
-        .empty-state i {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: var(--light-gray);
-        }
-        
-        .history-item {
-            padding: 1rem;
-            border-bottom: 1px solid var(--light-gray);
-            cursor: pointer;
-            transition: background 0.2s ease;
-        }
-        
-        .history-item:hover {
-            background: var(--light);
-        }
-        
-        .history-item:last-child {
-            border-bottom: none;
-        }
-        
-        .history-preview {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            color: var(--gray);
-            font-size: 0.9rem;
-            margin-top: 0.25rem;
-        }
-        
-        .history-time {
-            font-size: 0.8rem;
-            color: #adb5bd;
-            margin-top: 0.25rem;
-        }
-        
+        /* Responsive */
         @media (max-width: 768px) {
-            .card-body {
+            .container {
                 padding: 1rem;
+            }
+            
+            .tabs {
+                overflow-x: auto;
+                padding: 0 1rem;
+            }
+            
+            .tab {
+                padding: 1rem;
+                white-space: nowrap;
+            }
+            
+            .card-body {
+                padding: 1.5rem 1rem;
+            }
+            
+            .card-footer {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
             }
             
             .stats {
                 flex-direction: column;
-                gap: 0.5rem;
+                gap: 0.75rem;
             }
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="container">
@@ -349,9 +339,15 @@
             </div>
             
             <div class="tabs">
-                <div class="tab active" data-tab="sanitize">Sanitize</div>
-                <div class="tab" data-tab="history">History</div>
-                <div class="tab" data-tab="settings">Settings</div>
+                <div class="tab active" data-tab="sanitize">
+                    <i class="fas fa-magic"></i> Sanitize
+                </div>
+                <div class="tab" data-tab="history">
+                    <i class="fas fa-history"></i> History
+                </div>
+                <div class="tab" data-tab="settings">
+                    <i class="fas fa-cog"></i> Settings
+                </div>
             </div>
             
             <div class="card-body">
@@ -359,27 +355,24 @@
                 <div class="tab-content active" id="sanitize-tab">
                     <div class="form-group">
                         <label for="inputMessage">Paste the message you received:</label>
-                        <textarea id="inputMessage" placeholder="Enter or paste the message you want to sanitize here..."></textarea>
+                        <textarea id="inputMessage" placeholder="Paste the message you want to sanitize here..."></textarea>
                     </div>
                     
                     <div class="form-group">
                         <label>Sanitized Message:</label>
-                        <div class="output-box" id="result">
-                            <div class="empty-state">
-                                <i class="fas fa-comment-slash"></i>
-                                <p>Your sanitized message will appear here</p>
-                            </div>
+                        <div id="result" class="card" style="min-height: 100px; padding: 1rem;">
+                            <p class="text-muted">Your sanitized message will appear here...</p>
                         </div>
                     </div>
                     
                     <div class="stats">
-                        <div class="stat-item">
+                        <div class="stat">
                             <i class="fas fa-filter"></i>
-                            <span>Filtered: <span id="filteredCount">0</span> words</span>
+                            <span id="filteredCount">0 words filtered</span>
                         </div>
-                        <div class="stat-item">
+                        <div class="stat">
                             <i class="fas fa-shield-alt"></i>
-                            <span>Safety level: <span id="safetyLevel">High</span></span>
+                            <span id="safetyLevel">Safety: <span class="text-success">Safe</span></span>
                         </div>
                     </div>
                 </div>
@@ -387,16 +380,14 @@
                 <!-- History Tab -->
                 <div class="tab-content" id="history-tab">
                     <div id="historyList">
-                        <div class="empty-state">
-                            <i class="fas fa-history"></i>
-                            <p>Your sanitized messages will appear here</p>
-                        </div>
+                        <p class="text-muted">Your sanitization history will appear here.</p>
                     </div>
                 </div>
                 
                 <!-- Settings Tab -->
                 <div class="tab-content" id="settings-tab">
-                    <div class="settings-panel">
+                    <div class="form-group">
+                        <h3>Filter Settings</h3>
                         <div class="setting-item">
                             <div>
                                 <div class="setting-label">Enable Profanity Filter</div>
@@ -429,7 +420,10 @@
                                 <span class="slider"></span>
                             </label>
                         </div>
-                        
+                    </div>
+                    
+                    <div class="form-group" style="margin-top: 2rem;">
+                        <h3>History Settings</h3>
                         <div class="setting-item">
                             <div>
                                 <div class="setting-label">Save Message History</div>
@@ -440,146 +434,114 @@
                                 <span class="slider"></span>
                             </label>
                         </div>
+                        
+                        <div style="margin-top: 1.5rem;">
+                            <button id="clearHistoryBtn" class="btn btn-outline">
+                                <i class="fas fa-trash"></i> Clear History
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
             
             <div class="card-footer">
-                <button class="btn" id="sanitizeBtn">
+                <button class="btn btn-primary" id="sanitizeBtn">
                     <i class="fas fa-magic"></i> Sanitize Message
                 </button>
                 <div>
-                    <button class="btn btn-outline" id="clearBtn">
-                        <i class="fas fa-eraser"></i> Clear
-                    </button>
                     <button class="btn btn-outline" id="copyBtn">
                         <i class="far fa-copy"></i> Copy
+                    </button>
+                    <button class="btn btn-outline ml-2" id="clearBtn">
+                        <i class="fas fa-eraser"></i> Clear
                     </button>
                 </div>
             </div>
         </div>
+        
+        <footer class="text-center text-muted text-sm" style="margin-top: 2rem;">
+            <p>MsgSentinel &copy; 2023 | All messages are processed locally in your browser</p>
+        </footer>
     </div>
 
     <script>
         // Enhanced word lists for filtering
         const filterLists = {
             profanity: [
-                // Basic profanity
-                'idiot', 'stupid', 'ugly', 'worthless', 'failure', 'useless', 'dumb', 
-                'fat', 'disgusting', 'hate', 'pathetic', 'loser', 'bitch', 'slut', 'whore', 
-                'cunt', 'dick', 'asshole', 'fuck', 'shit', 'damn', 'piss', 'bastard', 'douche',
-                'retard', 'nigger', 'nigga', 'chink', 'spic', 'kike', 'gook', 'towelhead',
-                'raghead', 'wetback', 'beaner', 'coon', 'wop', 'dago', 'kraut', 'mick',
-                'paddy', 'gypsy', 'paki', 'sambo', 'savage', 'taco', 'wog', 'yid',
-                'gook', 'gyp', 'heeb', 'hymie', 'jap'
+                // Profanity word list (truncated for brevity)
+                '\b(ass|arse|asshole|arsehole|bitch|bastard|bollocks|bullshit|bitchy|bitching|blowjob|blow job|blow me|blowjob|blow jobs|blowjobs|blow job|blowjob|blow jobs|blowjobs|blow job|blowjob|blow jobs|blowjobs|blow job|blowjob|blow jobs|blowjobs)\b',
+                // Add more words as needed
             ],
-            
             threats: [
-                // Threats and self-harm
-                'kill yourself', 'you should die', 'end your life', 'commit suicide',
-                'i\'ll kill you', 'i will kill you', 'i\'ll hurt you', 'i will hurt you',
-                'you deserve to die', 'you should be dead', 'i hope you die',
-                'i wish you were dead', 'go die', 'drop dead', 'i\'ll beat you',
-                'i will beat you', 'i\'ll hit you', 'i will hit you', 'i\'ll punch you',
-                'i will punch you', 'i\'ll stab you', 'i will stab you', 'i\'ll shoot you',
-                'i will shoot you', 'i\'ll kill myself', 'i will kill myself',
-                'i\'m going to kill myself', 'i am going to kill myself', 'i want to die',
-                'i want to kill myself', 'i want to end it all', 'i want to end my life'
+                // Threatening language patterns
+                '\b(kill|harm|hurt|attack|beat|fight|stab|shoot|bomb|murder|threat|threaten|threatening|violent|violence|rape|raping|raped|rapist|abuse|abusing|abused|abuser|harass|harassing|harassed|harassment|stalking|stalker|stalk|stalked|revenge|dox|doxx|doxxing|doxing|doxed|doxxed|swat|swatting|swatted|swatter)\b',
+                // Add more patterns as needed
             ],
-            
             personalAttacks: [
-                // Personal attacks and insults
-                'you are a bad', 'you are an awful', 'you are terrible', 'you are horrible',
-                'you are disgusting', 'you are worthless', 'you are useless', 'you are a failure',
-                'you are a loser', 'you are an idiot', 'you are stupid', 'you are dumb',
-                'you are ugly', 'you are fat', 'you are disgusting', 'you are hateful',
-                'you are pathetic', 'you are a bitch', 'you are a slut', 'you are a whore',
-                'you are a mistake', 'you ruin everything', 'you are a burden',
-                'you are not good enough', 'you will never succeed', 'you are a disappointment',
-                'nobody likes you', 'everyone hates you', 'you have no friends',
-                'you are a waste of space', 'you are a waste of oxygen', 'you are a waste of time',
-                'you are a waste of life', 'you are a waste of skin', 'you are a waste of air'
+                // Personal attack patterns
+                '\b(idiot|moron|stupid|dumb|retard|retarded|ugly|fat|useless|worthless|failure|loser|hate you|i hate you|i hope you die|i wish you were dead|kill yourself|go die|you should die|you\'re a waste|you\'re pathetic|you\'re worthless|you\'re useless|you\'re a loser|you\'re a failure|you\'re a mistake|you\'re garbage|you\'re trash|you\'re a waste of space|you\'re a waste of oxygen|you\'re a waste of time|you\'re a waste of life|you\'re a waste of skin|you\'re a waste of air|you\'re a waste of breath|you\'re a waste of space|you\'re a waste of time|you\'re a waste of life|you\'re a waste of skin|you\'re a waste of air|you\'re a waste of breath)\b',
+                // Add more patterns as needed
             ]
         };
-
+        
         // DOM Elements
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
         const inputMessage = document.getElementById('inputMessage');
         const resultElement = document.getElementById('result');
         const sanitizeBtn = document.getElementById('sanitizeBtn');
-        const clearBtn = document.getElementById('clearBtn');
         const copyBtn = document.getElementById('copyBtn');
-        const filteredCount = document.getElementById('filteredCount');
-        const safetyLevel = document.getElementById('safetyLevel');
+        const clearBtn = document.getElementById('clearBtn');
+        const clearHistoryBtn = document.getElementById('clearHistoryBtn');
         const historyList = document.getElementById('historyList');
-        
-        // Settings elements
+        const filteredCountElement = document.getElementById('filteredCount');
+        const safetyLevelElement = document.getElementById('safetyLevel');
         const profanityFilter = document.getElementById('profanityFilter');
         const threatFilter = document.getElementById('threatFilter');
         const personalAttackFilter = document.getElementById('personalAttackFilter');
         const saveHistory = document.getElementById('saveHistory');
         
-        // Tab elements
-        const tabs = document.querySelectorAll('.tab');
-        const tabContents = document.querySelectorAll('.tab-content');
-        
-        // Message history
-        let messageHistory = JSON.parse(localStorage.getItem('messageHistory')) || [];
-        
         // Initialize the app
         function init() {
-            // Load settings from localStorage
+            // Load settings
             loadSettings();
             
-            // Load message history
+            // Load history
             renderHistory();
             
-            // Event listeners
-            sanitizeBtn.addEventListener('click', sanitizeMessage);
-            clearBtn.addEventListener('click', clearMessage);
-            copyBtn.addEventListener('click', copyToClipboard);
-            
-            // Tab switching
+            // Set up event listeners
             tabs.forEach(tab => {
                 tab.addEventListener('click', switchTab);
             });
             
-            // Settings changes
+            sanitizeBtn.addEventListener('click', sanitizeMessage);
+            copyBtn.addEventListener('click', copyToClipboard);
+            clearBtn.addEventListener('click', clearMessage);
+            clearHistoryBtn.addEventListener('click', clearHistory);
+            
+            // Settings change listeners
             profanityFilter.addEventListener('change', saveSettings);
             threatFilter.addEventListener('change', saveSettings);
             personalAttackFilter.addEventListener('change', saveSettings);
             saveHistory.addEventListener('change', saveSettings);
             
-            // Allow Enter to submit (Shift+Enter for new line)
-            inputMessage.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sanitizeMessage();
-                }
-            });
-            
-            // Check for URL parameters (for future SMS integration)
-            const urlParams = new URLSearchParams(window.location.search);
-            const message = urlParams.get('message');
-            if (message) {
-                inputMessage.value = decodeURIComponent(message);
-                sanitizeMessage();
-            }
+            // Set initial tab
+            switchTab({ target: document.querySelector('.tab[data-tab="sanitize"]') });
         }
         
         // Switch between tabs
         function switchTab(e) {
-            const tabId = e.target.getAttribute('data-tab');
+            const tab = e.target.closest('.tab');
+            if (!tab) return;
             
             // Update active tab
-            tabs.forEach(tab => tab.classList.remove('active'));
-            e.target.classList.add('active');
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
             
             // Show corresponding content
+            const tabId = tab.getAttribute('data-tab');
             tabContents.forEach(content => {
-                content.classList.remove('active');
-                if (content.id === `${tabId}-tab`) {
-                    content.classList.add('active');
-                }
+                content.classList.toggle('active', content.id === `${tabId}-tab`);
             });
         }
         
@@ -615,7 +577,7 @@
             }
             
             // Update UI
-            filteredCount.textContent = filteredWords;
+            filteredCountElement.textContent = `${filteredWords} words filtered`;
             updateSafetyLevel(filteredWords, input.length);
             
             // Format the output
@@ -638,19 +600,21 @@
         
         // Apply a filter to the text
         function applyFilter(text, wordList) {
+            let filteredText = text;
             let count = 0;
-            let result = text;
             
             wordList.forEach(word => {
-                const regex = new RegExp(`\\b${word}\\b`, 'gi');
-                const matches = result.match(regex);
-                if (matches) {
-                    count += matches.length;
-                    result = result.replace(regex, '[content removed]');
-                }
+                const regex = new RegExp(word, 'gi');
+                const matches = filteredText.match(regex) || [];
+                count += matches.length;
+                filteredText = filteredText.replace(regex, match => {
+                    return '<span class="filtered-word" style="background: rgba(255, 0, 0, 0.2); color: var(--danger); padding: 0 2px; border-radius: 3px; text-decoration: line-through;" title="Filtered word">' + 
+                           '<span style="opacity: 0.5;">' + match + '</span>' + 
+                           '</span>';
+                });
             });
             
-            return { text: result, count };
+            return { text: filteredText, count };
         }
         
         // Update safety level indicator
@@ -658,37 +622,27 @@
             const ratio = filteredCount / (inputLength / 5); // Rough estimate of word count
             
             if (filteredCount === 0) {
-                safetyLevel.textContent = 'Safe';
-                safetyLevel.style.color = '#28a745';
+                safetyLevelElement.innerHTML = 'Safety: <span class="text-success">Safe</span>';
             } else if (ratio < 0.1) {
-                safetyLevel.textContent = 'Mostly Safe';
-                safetyLevel.style.color = '#4cc9f0';
+                safetyLevelElement.innerHTML = 'Safety: <span class="text-success">Mostly Safe</span>';
             } else if (ratio < 0.3) {
-                safetyLevel.textContent = 'Caution';
-                safetyLevel.style.color = '#ffc107';
+                safetyLevelElement.innerHTML = 'Safety: <span class="text-warning">Caution</span>';
             } else {
-                safetyLevel.textContent = 'Warning';
-                safetyLevel.style.color = '#f72585';
+                safetyLevelElement.innerHTML = 'Safety: <span class="text-danger">Warning</span>';
             }
         }
         
         // Show empty state
         function showEmptyState(message) {
-            resultElement.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-comment-slash"></i>
-                    <p>${message}</p>
-                </div>
-            `;
+            resultElement.innerHTML = `<p class="text-muted">${message}</p>`;
         }
         
         // Clear the input and output
         function clearMessage() {
             inputMessage.value = '';
-            showEmptyState('Your sanitized message will appear here');
-            filteredCount.textContent = '0';
-            safetyLevel.textContent = 'High';
-            safetyLevel.style.color = '#28a745';
+            showEmptyState('Your sanitized message will appear here...');
+            filteredCountElement.textContent = '0 words filtered';
+            safetyLevelElement.innerHTML = 'Safety: <span class="text-success">Safe</span>';
         }
         
         // Copy sanitized message to clipboard
@@ -700,64 +654,61 @@
                 return;
             }
             
-            navigator.clipboard.writeText(resultText)
-                .then(() => {
-                    const originalText = copyBtn.innerHTML;
-                    copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-                    setTimeout(() => {
-                        copyBtn.innerHTML = originalText;
-                    }, 2000);
-                })
-                .catch(err => {
-                    console.error('Failed to copy text: ', err);
-                    alert('Failed to copy text to clipboard');
-                });
+            navigator.clipboard.writeText(resultText).then(() => {
+                // Show a temporary success message
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+                alert('Failed to copy text. Please try again.');
+            });
         }
         
         // Save message to history
         function saveToHistory(original, sanitized, filteredCount) {
+            const history = JSON.parse(localStorage.getItem('messageHistory') || '[]');
             const now = new Date();
-            const message = {
+            
+            const historyItem = {
                 id: Date.now(),
-                original: original,
-                sanitized: sanitized,
-                filteredCount: filteredCount,
-                timestamp: now.toISOString(),
+                original,
+                sanitized,
+                filteredCount,
                 date: now.toLocaleDateString(),
-                time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                time: now.toLocaleTimeString(),
+                timestamp: now.getTime()
             };
             
             // Add to beginning of array (most recent first)
-            messageHistory.unshift(message);
+            history.unshift(historyItem);
             
-            // Keep only the last 50 messages
-            if (messageHistory.length > 50) {
-                messageHistory = messageHistory.slice(0, 50);
+            // Keep only the last 50 items
+            if (history.length > 50) {
+                history.pop();
             }
             
-            // Save to localStorage
-            localStorage.setItem('messageHistory', JSON.stringify(messageHistory));
-            
-            // Update the history display
+            localStorage.setItem('messageHistory', JSON.stringify(history));
             renderHistory();
         }
         
         // Render message history
         function renderHistory() {
-            if (messageHistory.length === 0) {
-                historyList.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-history"></i>
-                        <p>Your sanitized messages will appear here</p>
-                    </div>
-                `;
+            const history = JSON.parse(localStorage.getItem('messageHistory') || '[]');
+            
+            if (history.length === 0) {
+                historyList.innerHTML = '<p class="text-muted">Your sanitization history will appear here.</p>';
                 return;
             }
             
-            const historyItems = messageHistory.map(msg => `
-                <div class="history-item" data-id="${msg.id}">
-                    <div class="history-preview">${msg.sanitized.substring(0, 100)}${msg.sanitized.length > 100 ? '...' : ''}</div>
-                    <div class="history-time">${msg.date} at ${msg.time} • ${msg.filteredCount} filtered items</div>
+            const historyItems = history.map(item => `
+                <div class="history-item" data-id="${item.id}">
+                    <p>${item.sanitized.substring(0, 100)}${item.sanitized.length > 100 ? '...' : ''}</p>
+                    <div class="history-time">
+                        ${item.date} at ${item.time} • ${item.filteredCount} filtered item${item.filteredCount !== 1 ? 's' : ''}
+                    </div>
                 </div>
             `).join('');
             
@@ -766,21 +717,31 @@
             // Add click handlers to history items
             document.querySelectorAll('.history-item').forEach(item => {
                 item.addEventListener('click', () => {
-                    const messageId = parseInt(item.getAttribute('data-id'));
-                    const message = messageHistory.find(msg => msg.id === messageId);
-                    if (message) {
+                    const id = parseInt(item.getAttribute('data-id'));
+                    const historyItem = history.find(h => h.id === id);
+                    if (historyItem) {
                         // Switch to sanitize tab
-                        document.querySelector('[data-tab="sanitize"]').click();
+                        document.querySelector('.tab[data-tab="sanitize"]').click();
                         
-                        // Populate the input and sanitize
-                        inputMessage.value = message.original;
-                        sanitizeMessage();
+                        // Fill in the input and show the result
+                        inputMessage.value = historyItem.original;
+                        resultElement.innerHTML = `<p>${historyItem.sanitized}</p>`;
+                        filteredCountElement.textContent = `${historyItem.filteredCount} words filtered`;
+                        updateSafetyLevel(historyItem.filteredCount, historyItem.original.length);
                         
                         // Scroll to top
                         window.scrollTo(0, 0);
                     }
                 });
             });
+        }
+        
+        // Clear history
+        function clearHistory() {
+            if (confirm('Are you sure you want to clear your history? This cannot be undone.')) {
+                localStorage.removeItem('messageHistory');
+                renderHistory();
+            }
         }
         
         // Save settings to localStorage
@@ -792,21 +753,18 @@
                 saveHistory: saveHistory.checked
             };
             
-            localStorage.setItem('messageSanitizerSettings', JSON.stringify(settings));
+            localStorage.setItem('msgSentinelSettings', JSON.stringify(settings));
         }
         
         // Load settings from localStorage
         function loadSettings() {
-            const savedSettings = localStorage.getItem('messageSanitizerSettings');
+            const settings = JSON.parse(localStorage.getItem('msgSentinelSettings') || '{}');
             
-            if (savedSettings) {
-                const settings = JSON.parse(savedSettings);
-                
-                profanityFilter.checked = settings.profanityFilter !== false; // Default to true
-                threatFilter.checked = settings.threatFilter !== false; // Default to true
-                personalAttackFilter.checked = settings.personalAttackFilter !== false; // Default to true
-                saveHistory.checked = settings.saveHistory !== false; // Default to true
-            }
+            // Apply saved settings or use defaults
+            profanityFilter.checked = settings.profanityFilter !== undefined ? settings.profanityFilter : true;
+            threatFilter.checked = settings.threatFilter !== undefined ? settings.threatFilter : true;
+            personalAttackFilter.checked = settings.personalAttackFilter !== undefined ? settings.personalAttackFilter : true;
+            saveHistory.checked = settings.saveHistory !== undefined ? settings.saveHistory : true;
         }
         
         // Initialize the app when the DOM is loaded
