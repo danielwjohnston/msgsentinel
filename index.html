@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Neon Bauhaus Noir — Starter</title>
+  <link rel="stylesheet" href="daniel-aesthetic.css">
+  <style>
+    /* Inline fallback if the external CSS isn't found (kept tiny) */
+    body{background:#0b0b0b;color:#e6e6e6;font-family:system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif}
+    .fallback{display:none}
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container" style="display:flex;align-items:center;justify-content:space-between;padding:.75rem 0;">
+      <div class="brand">Neon Bauhaus Noir</div>
+      <div class="inline">
+        <a href="#" class="badge accent">Docs</a>
+        <a href="#" class="badge">Changelog</a>
+        <button id="themeBtn" class="btn outline">Toggle Earth Mode</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="section">
+    <div class="container grid ghost-grid">
+      <div style="grid-column: span 7;">
+        <h1>Clarity. Grid. Glow.</h1>
+        <p class="muted" style="max-width:56ch">
+          A dark, utilitarian base with disciplined neon lime highlights. Geometric type, rounded-2xl cards,
+          and quick micro-interactions. Use this as your base UI kit.
+        </p>
+        <div class="inline" style="margin-top:1rem">
+          <button class="btn">Primary Action</button>
+          <button class="btn outline">Secondary</button>
+          <button class="btn ghost">Ghost</button>
+        </div>
+      </div>
+      <aside style="grid-column: span 5;">
+        <article class="card hover-raise">
+          <header>
+            <div>
+              <div class="title">Demo Card</div>
+              <div class="subtitle">Surface + glow on hover</div>
+            </div>
+            <span class="badge accent">v1.0</span>
+          </header>
+          <p>Drop this into any project. The token system keeps things consistent, while utilities and
+             components give you momentum.</p>
+          <hr class="hr" style="margin:1rem 0">
+          <label class="inline" style="align-items:center">
+            <span class="muted">Power</span>
+            <span role="switch" aria-checked="false" tabindex="0" class="switch" id="powerSwitch" style="margin-left:.75rem"></span>
+          </label>
+        </article>
+      </aside>
+    </div>
+  </header>
+
+  <!-- Content section -->
+  <section class="section">
+    <div class="container grid">
+      <div style="grid-column: span 7;">
+        <article class="card">
+          <header>
+            <div class="title">Form Elements</div>
+            <div class="subtitle">Inputs that glow on focus</div>
+          </header>
+          <form class="stack" onsubmit="event.preventDefault()">
+            <input class="input" placeholder="Your name">
+            <input type="email" class="input" placeholder="Email">
+            <select class="select">
+              <option>Choose one</option>
+              <option>Option A</option>
+              <option>Option B</option>
+            </select>
+            <textarea class="textarea" rows="4" placeholder="Message"></textarea>
+            <div class="inline">
+              <button class="btn" type="submit">Submit</button>
+              <button class="btn ghost" type="reset">Reset</button>
+            </div>
+          </form>
+        </article>
+      </div>
+      <div style="grid-column: span 5;">
+        <article class="card">
+          <header>
+            <div class="title">Table</div>
+            <div class="subtitle">Soft-separated rows</div>
+          </header>
+          <table class="table">
+            <thead>
+              <tr><th>Item</th><th>Status</th><th>ETA</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Camera mount</td><td><span class="badge accent">Ready</span></td><td>Now</td></tr>
+              <tr><td>Encoder rack</td><td><span class="badge">Queued</span></td><td>Tomorrow</td></tr>
+              <tr><td>Overlay pack</td><td><span class="badge">Draft</span></td><td>Next week</td></tr>
+            </tbody>
+          </table>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="section">
+    <div class="container muted" style="display:flex;justify-content:space-between;align-items:center">
+      <small>© 2025 Daniel Johnston • Built with discipline and glow</small>
+      <small>Tip: add <code>ghost-grid</code> to any container to visualize the 12-col grid.</small>
+    </div>
+  </footer>
+
+  <script>
+    // Earth theme toggle
+    const btn = document.getElementById('themeBtn');
+    btn.addEventListener('click', () => {
+      document.documentElement.classList.toggle('theme-earth');
+    });
+
+    // Accessible switch demo
+    const sw = document.getElementById('powerSwitch');
+    const toggle = () => sw.setAttribute('aria-checked', sw.getAttribute('aria-checked') === 'true' ? 'false' : 'true');
+    sw.addEventListener('click', toggle);
+    sw.addEventListener('keydown', (e) => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggle(); }});
+  </script>
+</body>
+</html>
