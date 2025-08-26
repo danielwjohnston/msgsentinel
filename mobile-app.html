@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MsgSentinel Mobile</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="daniel-aesthetic.css">
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
+  <style>
+    body {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      margin-bottom: 1rem;
+    }
+    #result {
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1 class="mb-2">MsgSentinel</h1>
+  <p class="muted mb-2">Paste a message to sanitize it.</p>
+  <textarea id="inputText" class="textarea" placeholder="Paste text here..."></textarea>
+  <button id="sanitizeBtn" class="btn">Sanitize</button>
+  <div id="result" class="card" style="display:none;">
+    <header>
+      <h3 class="title">Sanitized Result</h3>
+    </header>
+    <div id="sanitizedOutput"></div>
+  </div>
+  <script>
+    const input = document.getElementById('inputText');
+    const resultCard = document.getElementById('result');
+    const output = document.getElementById('sanitizedOutput');
+    document.getElementById('sanitizeBtn').addEventListener('click', () => {
+      const sanitized = DOMPurify.sanitize(input.value);
+      output.textContent = sanitized;
+      resultCard.style.display = 'block';
+    });
+  </script>
+</body>
+</html>
