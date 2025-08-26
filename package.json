@@ -1,0 +1,16 @@
+{
+  "name": "msgsentinel",
+  "version": "1.0.0",
+  "description": "A modern, privacy-focused message sanitization tool that helps protect you from harmful content in messages. Built with a clean, accessible interface and designed with security in mind.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "jest": "^30.0.5"
+  }
+}
