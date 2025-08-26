@@ -71,8 +71,9 @@ MsgSentinel uses a custom design system called "Neon Bauhaus Noir" featuring:
 msgsentinel/
 ├── index.html          # Main application
 ├── daniel-aesthetic.css # Design system styles
-├── README.md           # This file
-└── assets/             # Images and other assets
+├── msgsentinel.html    # Standalone sanitizer component
+├── theme-preview.html  # Design system preview
+└── README.md           # Project documentation
 ```
 
 ### Building
