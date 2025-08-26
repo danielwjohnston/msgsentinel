@@ -191,7 +191,7 @@ p, ul, ol { font-size: var(--size-400); color: var(--text); }
 .btn:active { transform: translateY(0); }
 .btn:disabled { opacity: .6; cursor: not-allowed; }
 
-.btn.outline {
+.btn-outline {
   --_bg: transparent; --_fg: var(--accent);
   background: linear-gradient(var(--surface-2), var(--surface-2)) padding-box,
               linear-gradient(90deg, var(--accent-700), var(--accent-300)) border-box;
@@ -369,4 +369,4 @@ p, ul, ol { font-size: var(--size-400); color: var(--text); }
 
 /* ---------- Example component compose ---------- */
 /* <article class="card hover-raise"> ... </article> */
-/* <button class="btn">Primary</button> <button class="btn outline">Outline</button> */
+/* <button class="btn">Primary</button> <button class="btn btn-outline">Outline</button> */
