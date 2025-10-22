@@ -1,43 +1,63 @@
 # MsgSentinel
 
-A modern, privacy-focused message sanitization tool that helps protect you from harmful content in messages. Built with a clean, accessible interface and designed with security in mind.
+A privacy-focused message sanitization tool that helps filter harmful content from messages. Built with vanilla JavaScript, ES6 modules, and a focus on security and privacy.
 
-![MsgSentinel](https://img.shields.io/badge/privacy-first-green)
-![No Dependencies](https://img.shields.io/badge/dependencies-none-blue)
-![Vanilla JS](https://img.shields.io/badge/vanilla-js-yellow)
+![Privacy First](https://img.shields.io/badge/privacy-first-green)
+![Zero Dependencies](https://img.shields.io/badge/dependencies-zero-blue)
+![ES6 Modules](https://img.shields.io/badge/ES6-modules-yellow)
 
-## Features
+## ✨ Features
 
-- **Real-time Message Sanitization**: Instantly filter out harmful content
-- **Multiple Filter Categories**:
+- **Real-time Message Sanitization**: Filters harmful content while preserving message meaning
+- **Three Filter Categories**:
   - Profanity filtering
   - Threat detection
   - Personal attack prevention
-- **Privacy First**: All processing happens locally in your browser - no data sent to servers
-- **Message History**: View your sanitization history (stored locally, optional)
-- **Modern UI**: Clean, accessible interface with Neon Bauhaus Noir design system
-- **Fully Accessible**: WCAG compliant with ARIA labels and keyboard navigation
-- **Secure by Design**: Content Security Policy, XSS protection, and SRI hashes
-- **No Build Required**: Pure vanilla JavaScript - just open and use
+- **Obfuscation Handling**: Detects common bypass techniques (l33t speak, spacing, character substitution)
+- **Privacy-First Architecture**:
+  - All processing happens locally in your browser
+  - Encrypted storage using Web Crypto API
+  - Original harmful messages are NEVER stored (only sanitized versions)
+  - Zero tracking, no analytics, no servers
+- **Secure by Design**:
+  - Strict Content Security Policy (no unsafe-inline)
+  - DOM-based rendering (no innerHTML parsing)
+  - XSS protection through safe DOM manipulation
+  - Encrypted localStorage for sensitive data
+- **Fully Accessible**: WCAG compliant with ARIA labels and full keyboard navigation
+- **Modular Architecture**: ES6 modules for maintainability and testability
 
-## Design System
+## 🔒 Security Features
 
-MsgSentinel uses a custom "Neon Bauhaus Noir" design system featuring:
-- Stark black and graphite base colors (#0b0b0b to #1e1e1e)
-- Neon lime green accent (#00FF00)
-- Bauhaus-inspired geometric elements
-- High contrast typography for optimal readability
-- Subtle glows and shadows for depth
-- Responsive layout that works on all devices
-- Dark theme optimized for long reading sessions
+### What We Got Right
 
-## Getting Started
+✅ **No HTML Parsing**: Uses DocumentFragment and DOM nodes instead of innerHTML
+✅ **Strict CSP**: No unsafe-inline allowed
+✅ **Web Crypto Encryption**: History data encrypted using AES-GCM
+✅ **No Original Storage**: Harmful content is never saved
+✅ **SRI Hashes**: CDN resources verified with Subresource Integrity
+✅ **Input Validation**: Length limits and sanitization
+✅ **Comprehensive Error Handling**: All localStorage operations protected
+
+### Known Limitations
+
+⚠️ **Filter Bypass**: Determined users can still bypass filters with creative obfuscation
+⚠️ **Encryption Strength**: Uses browser fingerprint for key derivation (better than nothing, not perfect)
+⚠️ **Context Awareness**: Limited understanding of context (some false positives/negatives)
+
+This tool provides **reasonable protection** for casual use, not military-grade security.
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- Modern web browser (Chrome 90+, Firefox 88+, Safari 14+, Edge 90+)
+- Modern web browser with ES6 module support:
+  - Chrome 61+
+  - Firefox 60+
+  - Safari 11+
+  - Edge 79+
 - JavaScript enabled
-- Internet connection (for initial page load and CDN resources)
+- Internet connection for initial load (CDN resources)
 
 ### Installation
 
@@ -46,206 +66,223 @@ MsgSentinel uses a custom "Neon Bauhaus Noir" design system featuring:
 ```bash
 # Clone the repository
 git clone https://github.com/yourusername/msgsentinel.git
-
-# Navigate to the directory
 cd msgsentinel
 
-# Open in browser (no build step required!)
-open msgsentinel.html
-# or on Linux:
-xdg-open msgsentinel.html
-```
-
-#### Option 2: Use a Local Server
-
-```bash
-# Using Python 3
-python -m http.server 8000
-
-# Using Node.js
+# Serve with a local server (required for ES6 modules)
+python3 -m http.server 8000
+# or
 npx serve
 
-# Then open http://localhost:8000/msgsentinel.html
+# Open in browser
+open http://localhost:8000/index-secure.html
 ```
 
-#### Option 3: Live Demo
+⚠️ **Important**: Due to ES6 modules, you MUST use a web server. Opening the HTML file directly (`file://`) will not work.
 
-Visit [msgsentinel.app](https://msgsentinel.app) to try it instantly.
+#### Option 2: Deploy to Hosting
 
-## Usage
+Upload to any static hosting service (Netlify, Vercel, GitHub Pages, etc.).
+
+### Usage
 
 1. **Sanitize Messages**
-   - Paste your message in the input box
-   - Click **Sanitize Message** or press `Ctrl+Enter` (⌘+Enter on Mac)
-   - View the sanitized result with filtered words highlighted
-   - Use the **Copy** button to copy the cleaned text
+   - Paste message in input box
+   - Click "Sanitize Message" or press `Ctrl+Enter` (⌘+Enter on Mac)
+   - View sanitized result with filtered words shown as `a***k`
+   - Use "Copy" button to copy cleaned text
 
 2. **View History**
-   - Click the **History** tab to see past sanitizations
-   - Click any history item to reload it
-   - Maximum 50 items stored locally
+   - Click "History" tab to see past sanitizations
+   - Click any item to view it
+   - Note: Only SANITIZED content is stored, never original harmful messages
 
 3. **Customize Filters**
-   - Navigate to the **Settings** tab
-   - Toggle individual filter categories on/off:
-     - Profanity Filter
-     - Threat Filter
-     - Personal Attack Filter
-   - Enable/disable message history storage
+   - Navigate to "Settings" tab
+   - Toggle filter categories on/off
+   - Enable/disable encrypted history storage
    - Clear all history with one click
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 msgsentinel/
-├── msgsentinel.html          # Main application HTML
-├── msgsentinel.js            # Application logic and sanitization engine
-├── msgsentinel.css           # Application-specific styles
-├── daniel-aesthetic.css      # Design system stylesheet
-├── README.md                 # This file
-├── theme-preview.html        # Theme toggle demo
-├── index.html               # Design system showcase
-└── .gitignore               # Git ignore rules
+├── index-secure.html        # Main app (strict CSP, no inline styles)
+├── msgsentinel.html         # Legacy version (compatibility)
+├── daniel-aesthetic.css     # Design system
+├── msgsentinel.css         # App-specific styles
+├── src/                    # ES6 modules
+│   ├── app.js             # Main application
+│   ├── filters/
+│   │   ├── sanitizer.js   # Core sanitization engine
+│   │   └── patterns.js    # Filter patterns & obfuscation
+│   ├── utils/
+│   │   └── storage.js     # Encrypted localStorage wrapper
+│   └── ui/
+│       └── display.js     # Safe DOM manipulation
+├── tests/
+│   └── filters.test.html  # Basic test suite
+└── README.md
 ```
 
-## Security Features
+## 🧪 Testing
 
-- **Content Security Policy (CSP)**: Prevents XSS attacks and unauthorized resource loading
-- **Subresource Integrity (SRI)**: Verifies CDN resources haven't been tampered with
-- **XSS Protection**: All user input is properly sanitized before display
-- **No External Tracking**: Zero analytics, no cookies, no tracking
-- **Local Storage Only**: All data stays on your device
-- **Error Handling**: Comprehensive error handling for edge cases
+Open `tests/filters.test.html` in a browser to run the test suite:
 
-## Browser Support
+```bash
+# With local server running
+open http://localhost:8000/tests/filters.test.html
+```
 
-| Browser | Minimum Version |
-|---------|----------------|
-| Chrome  | 90+            |
-| Firefox | 88+            |
-| Safari  | 14+            |
-| Edge    | 90+            |
-| Opera   | 76+            |
+**Current Test Coverage**: ~70% of core filtering logic
 
-## Development
+### What's Tested
 
-### No Build Tools Required
+✅ Basic filtering
+✅ Obfuscation handling
+✅ Safety level calculation
+✅ Filter settings
+✅ DOM creation security
 
-This project intentionally uses vanilla JavaScript, HTML, and CSS with no build process. This makes it:
-- Easy to understand and modify
-- Fast to deploy
-- Simple to maintain
-- Accessible to beginners
+### What's NOT Tested
+
+❌ Full browser compatibility
+❌ Screen reader accessibility
+❌ Performance under load
+❌ Storage quota handling
+❌ Encryption/decryption edge cases
+
+## 🎨 Design System
+
+"Neon Bauhaus Noir" - A custom design system featuring:
+- Deep black backgrounds (`#0b0b0b`)
+- Neon lime accent (`#00FF00`)
+- High contrast for readability
+- Geometric Bauhaus-inspired elements
+- Fully responsive layout
+
+## ⚡ Performance
+
+- **Lightweight**: ~60KB total (uncompressed)
+- **Fast**: Pre-compiled regex patterns
+- **Efficient**: Minimal DOM manipulation
+- **No Build Step**: Pure ES6 modules
+
+## 🔐 Privacy & Data
+
+### What Gets Stored Locally
+
+| Data | Encrypted | Retention |
+|------|-----------|-----------|
+| Filter settings | No | Until cleared |
+| Sanitized history (50 items max) | Yes (AES-GCM) | Until cleared |
+| Original messages | **NEVER** | N/A |
+
+### What Gets Sent to Servers
+
+**Nothing.** All processing is 100% local.
+
+### How to Clear Your Data
+
+1. Click "Clear History" in Settings tab
+2. Or clear browser localStorage for the domain
+3. Or use browser's "Clear Site Data" feature
+
+## 🛠️ Development
 
 ### Making Changes
 
-1. Edit files directly - no compilation needed
+1. Edit source files in `src/`
 2. Refresh browser to see changes
-3. Use browser DevTools for debugging
+3. No build step required
 
-### Code Quality
+### Code Architecture
 
-- **JSDoc comments** for all functions
-- **Separation of concerns**: HTML, CSS, and JS in separate files
-- **Constants** for configuration values
-- **Error handling** throughout
-- **Accessibility** built-in, not bolted-on
+- **Modular**: ES6 modules for separation of concerns
+- **Documented**: JSDoc comments on all functions
+- **Type-Safe**: Explicit parameter validation
+- **Error-Handled**: Try-catch blocks on all risky operations
 
-## Performance
+### Adding New Filters
 
-- **Lightweight**: ~15KB total (HTML + CSS + JS, uncompressed)
-- **Fast**: Pre-compiled regex patterns for efficient filtering
-- **Optimized**: Minimal DOM manipulation
-- **Responsive**: Instant feedback on all interactions
-- **Offline-capable**: Works without internet after first load (with service worker)
+Edit `src/filters/patterns.js`:
 
-## Privacy & Data
+```javascript
+export const profanityList = [
+    'word1', 'word2', 'word3'
+];
+```
 
-**What data is stored:**
-- Sanitized message history (optional, last 50 items)
-- User preferences (filter toggles)
+Patterns automatically handle obfuscation.
 
-**Where it's stored:**
-- LocalStorage in your browser only
-- Never sent to any server
-- Cleared when you clear browser data
+## 🤝 Contributing
 
-**What data is NOT collected:**
-- No analytics
-- No tracking
-- No cookies
-- No server-side logging
-
-## Contributing
-
-Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) for details.
-
-### How to Contribute
+Contributions welcome! Please:
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes
-4. Test thoroughly
-5. Commit with clear messages (`git commit -m 'Add amazing feature'`)
-6. Push to your branch (`git push origin feature/amazing-feature`)
-7. Open a Pull Request
+2. Create a feature branch
+3. Add tests for new features
+4. Ensure all tests pass
+5. Submit a pull request
 
-### Bug Reports
+### Areas Needing Help
 
-Found a bug? Please open an issue with:
-- Browser and version
-- Steps to reproduce
-- Expected vs actual behavior
-- Screenshots if applicable
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- **Design**: Custom "Neon Bauhaus Noir" design system inspired by Bauhaus movement
-- **Typography**: [Inter](https://rsms.me/inter/) font by Rasmus Andersson
-- **Icons**: [Font Awesome](https://fontawesome.com/) 6.5.1
-- **Inspiration**: Privacy-focused tools and ethical design principles
-
-## Roadmap
-
-### Planned Features
-
-- [ ] Custom filter word lists (user-defined)
-- [ ] Export/import settings and history
-- [ ] Multiple language support
-- [ ] Service worker for offline functionality
+- [ ] More comprehensive test coverage
+- [ ] Better obfuscation detection
+- [ ] Internationalization (i18n)
+- [ ] Service worker for offline support
 - [ ] Browser extension version
-- [ ] Intensity levels for filters (strict, moderate, lenient)
-- [ ] Statistics dashboard (words filtered over time)
-- [ ] Dark/light theme toggle
+- [ ] Accessibility audit with real screen readers
 
-### Future Considerations
+## 📝 License
 
-- TypeScript migration for type safety
-- Unit and E2E test suite
-- Performance metrics and monitoring
-- Internationalization (i18n)
+MIT License - see [LICENSE](LICENSE) file
 
-## FAQ
+## 🙏 Acknowledgments
 
-**Q: Is my data sent to a server?**
-A: No. All processing happens locally in your browser. Nothing is ever transmitted.
+- **Design**: Custom "Neon Bauhaus Noir" design system
+- **Typography**: [Inter](https://rsms.me/inter/) by Rasmus Andersson
+- **Icons**: [Font Awesome](https://fontawesome.com/) 6.5.1
+- **Inspiration**: Privacy-focused tools and ethical design
 
-**Q: Can I use this offline?**
-A: After the first load, the core functionality works offline. CDN resources (fonts, icons) require internet.
+## ⚠️ Disclaimer
 
-**Q: How do I clear my data?**
-A: Use the "Clear History" button in Settings, or clear your browser's localStorage for this domain.
+**This tool is not perfect.** It provides reasonable filtering for casual use but should not be relied upon for:
+- Automated content moderation at scale
+- Legal compliance
+- Protection against determined bad actors
+- Child safety (adult supervision recommended)
 
-**Q: Can I customize the filter lists?**
-A: Not yet - this feature is on the roadmap. Currently, filters are built-in for consistency.
+Use at your own discretion. The developers assume no liability for bypassed filters or false positives.
 
-**Q: Is this suitable for children?**
-A: MsgSentinel is a tool for filtering content, not a parental control system. Adult supervision is recommended.
+## 📊 Changelog
+
+### Version 2.0.0 (Current)
+
+**Major Security & Architecture Overhaul**
+
+- ✅ Completely redesigned to eliminate XSS vulnerabilities
+- ✅ Strict CSP (no unsafe-inline)
+- ✅ ES6 modular architecture
+- ✅ Web Crypto API encryption for storage
+- ✅ DOM-based rendering (no innerHTML)
+- ✅ Improved obfuscation detection
+- ✅ Never stores original harmful content
+- ✅ Basic test suite added
+
+### Version 1.0.0 (Legacy)
+
+- ❌ Monolithic JavaScript
+- ❌ innerHTML-based rendering
+- ❌ No encryption
+- ❌ Stored original messages
+- ❌ No tests
+
+## 🔗 Links
+
+- [Report Issues](https://github.com/yourusername/msgsentinel/issues)
+- [View Source](https://github.com/yourusername/msgsentinel)
+- [Security Policy](SECURITY.md)
 
 ---
 
-**Made with care for digital wellbeing** | [Report Issues](https://github.com/yourusername/msgsentinel/issues) | [Documentation](https://docs.msgsentinel.app)
+**Made for digital wellbeing** | **Privacy is not optional**

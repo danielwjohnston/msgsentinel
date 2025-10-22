@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MsgSentinel - Filter Tests</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            background: #f5f5f5;
+        }
+        .test-suite {
+            background: white;
+            padding: 2rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; }
+        h2 {margin-top: 0; color: #00aa00; }
+        .test-case {
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-left: 4px solid #ddd;
+            background: #fafafa;
+        }
+        .test-case.pass {
+            border-left-color: #00aa00;
+            background: #f0fff0;
+        }
+        .test-case.fail {
+            border-left-color: #cc0000;
+            background: #fff0f0;
+        }
+        .test-name {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .test-result {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .summary {
+            padding: 1rem;
+            margin-top: 2rem;
+            background: #e8f4f8;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .summary.pass { background: #e8f8e8; }
+        .summary.fail { background: #f8e8e8; }
+        code {
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 MsgSentinel Filter Tests</h1>
+    <div id="results"></div>
+    <div id="summary" class="summary"></div>
+
+    <script type="module">
+        import { MessageSanitizer } from '../src/filters/sanitizer.js';
+        import { createFilterPattern, normalizeText } from '../src/filters/patterns.js';
+
+        class TestRunner {
+            constructor() {
+                this.tests = [];
+                this.passed = 0;
+                this.failed = 0;
+            }
+
+            test(name, fn) {
+                this.tests.push({ name, fn });
+            }
+
+            async run() {
+                const resultsDiv = document.getElementById('results');
+                const summaryDiv = document.getElementById('summary');
+
+                for (const { name, fn } of this.tests) {
+                    const suiteDiv = document.createElement('div');
+                    suiteDiv.className = 'test-suite';
+
+                    const title = document.createElement('h2');
+                    title.textContent = name;
+                    suiteDiv.appendChild(title);
+
+                    try {
+                        const testCases = await fn();
+                        testCases.forEach(tc => {
+                            const testDiv = document.createElement('div');
+                            testDiv.className = `test-case ${tc.pass ? 'pass' : 'fail'}`;
+
+                            const nameDiv = document.createElement('div');
+                            nameDiv.className = 'test-name';
+                            nameDiv.textContent = `${tc.pass ? '✓' : '✗'} ${tc.name}`;
+                            testDiv.appendChild(nameDiv);
+
+                            if (tc.message) {
+                                const msgDiv = document.createElement('div');
+                                msgDiv.className = 'test-result';
+                                msgDiv.innerHTML = tc.message;
+                                testDiv.appendChild(msgDiv);
+                            }
+
+                            suiteDiv.appendChild(testDiv);
+
+                            if (tc.pass) this.passed++;
+                            else this.failed++;
+                        });
+                    } catch (error) {
+                        const errorDiv = document.createElement('div');
+                        errorDiv.className = 'test-case fail';
+                        errorDiv.innerHTML = `<strong>Test suite error:</strong> ${error.message}`;
+                        suiteDiv.appendChild(errorDiv);
+                        this.failed++;
+                    }
+
+                    resultsDiv.appendChild(suiteDiv);
+                }
+
+                // Summary
+                const total = this.passed + this.failed;
+                const passRate = ((this.passed / total) * 100).toFixed(1);
+                summaryDiv.className = `summary ${this.failed === 0 ? 'pass' : 'fail'}`;
+                summaryDiv.innerHTML = `
+                    <h2>Test Summary</h2>
+                    <p><strong>${this.passed}</strong> passed, <strong>${this.failed}</strong> failed out of <strong>${total}</strong> tests</p>
+                    <p>Pass rate: <strong>${passRate}%</strong></p>
+                `;
+            }
+
+            assert(condition, message) {
+                return {
+                    pass: condition,
+                    message: message
+                };
+            }
+        }
+
+        const runner = new TestRunner();
+
+        // Test Suite 1: Basic Filtering
+        runner.test('Basic Filtering', async () => {
+            const sanitizer = new MessageSanitizer();
+            const results = [];
+
+            // Test 1: Simple profanity
+            const test1 = sanitizer.sanitize('This is a damn test');
+            results.push(runner.assert(
+                test1.filteredCount === 1,
+                `Expected 1 filtered word, got ${test1.filteredCount}`
+            ));
+            results[results.length - 1].name = 'Filters simple profanity';
+
+            // Test 2: Multiple filters
+            const test2 = sanitizer.sanitize('You stupid idiot');
+            results.push(runner.assert(
+                test2.filteredCount === 2,
+                `Expected 2 filtered words, got ${test2.filteredCount}`
+            ));
+            results[results.length - 1].name = 'Filters multiple words';
+
+            // Test 3: Clean text
+            const test3 = sanitizer.sanitize('Hello, how are you?');
+            results.push(runner.assert(
+                test3.filteredCount === 0,
+                `Expected 0 filtered words, got ${test3.filteredCount}`
+            ));
+            results[results.length - 1].name = 'Does not filter clean text';
+
+            // Test 4: Empty input
+            const test4 = sanitizer.sanitize('');
+            results.push(runner.assert(
+                test4.filteredCount === 0 && test4.sanitized === '',
+                `Expected empty result for empty input`
+            ));
+            results[results.length - 1].name = 'Handles empty input';
+
+            return results;
+        });
+
+        // Test Suite 2: Obfuscation Handling
+        runner.test('Obfuscation Handling', async () => {
+            const sanitizer = new MessageSanitizer();
+            const results = [];
+
+            // Test 1: L33t speak
+            const test1 = sanitizer.sanitize('You st00p1d f00l');
+            results.push(runner.assert(
+                test1.filteredCount > 0,
+                `Expected obfuscated words to be caught. Got ${test1.filteredCount} filtered.`
+            ));
+            results[results.length - 1].name = 'Catches l33t speak obfuscation';
+
+            // Test 2: Spacing
+            const test2 = sanitizer.sanitize('s t u p i d');
+            results.push(runner.assert(
+                test2.filteredCount > 0,
+                `Expected spaced words to be caught. Got ${test2.filteredCount} filtered.`
+            ));
+            results[results.length - 1].name = 'Catches spacing obfuscation';
+
+            return results;
+        });
+
+        // Test Suite 3: Safety Level Calculation
+        runner.test('Safety Level Calculation', async () => {
+            const sanitizer = new MessageSanitizer();
+            const results = [];
+
+            const test1 = sanitizer.sanitize('This is a clean message');
+            results.push(runner.assert(
+                test1.safetyLevel === 'safe',
+                `Expected 'safe', got '${test1.safetyLevel}'`
+            ));
+            results[results.length - 1].name = 'Calculates "safe" correctly';
+
+            const test2 = sanitizer.sanitize('damn');
+            results.push(runner.assert(
+                test2.safetyLevel === 'warning',
+                `Expected 'warning', got '${test2.safetyLevel}'`
+            ));
+            results[results.length - 1].name = 'Calculates "warning" for high ratio';
+
+            return results;
+        });
+
+        // Test Suite 4: Filter Settings
+        runner.test('Filter Settings', async () => {
+            const sanitizer = new MessageSanitizer();
+            const results = [];
+
+            // Test with profanity filter disabled
+            sanitizer.updateSettings({ profanity: false });
+            const test1 = sanitizer.sanitize('This is damn good');
+            results.push(runner.assert(
+                test1.filteredCount === 0,
+                `Expected 0 (profanity filter disabled), got ${test1.filteredCount}`
+            ));
+            results[results.length - 1].name = 'Respects disabled profanity filter';
+
+            // Re-enable
+            sanitizer.updateSettings({ profanity: true });
+            const test2 = sanitizer.sanitize('This is damn good');
+            results.push(runner.assert(
+                test2.filteredCount === 1,
+                `Expected 1 (profanity filter enabled), got ${test2.filteredCount}`
+            ));
+            results[results.length - 1].name = 'Respects enabled profanity filter';
+
+            return results;
+        });
+
+        // Test Suite 5: DOM Creation (Security)
+        runner.test('DOM Creation Security', async () => {
+            const sanitizer = new MessageSanitizer();
+            const results = [];
+
+            // Test that we create actual DOM nodes, not HTML strings
+            const result = sanitizer.sanitize('Test damn message');
+            const fragment = sanitizer.createDOMRepresentation(
+                result.original,
+                result.sanitized,
+                result.filteredWords
+            );
+
+            results.push(runner.assert(
+                fragment instanceof DocumentFragment,
+                `Expected DocumentFragment, got ${typeof fragment}`
+            ));
+            results[results.length - 1].name = 'Creates DocumentFragment';
+
+            results.push(runner.assert(
+                fragment.childNodes.length > 0,
+                `Expected child nodes, got ${fragment.childNodes.length}`
+            ));
+            results[results.length - 1].name = 'Fragment contains child nodes';
+
+            // Test that filtered spans are created with data attributes
+            const div = document.createElement('div');
+            div.appendChild(fragment.cloneNode(true));
+            const filteredSpans = div.querySelectorAll('[data-filtered="true"]');
+
+            results.push(runner.assert(
+                filteredSpans.length > 0,
+                `Expected filtered spans, got ${filteredSpans.length}`
+            ));
+            results[results.length - 1].name = 'Creates filtered word spans with data attributes';
+
+            return results;
+        });
+
+        // Run all tests
+        runner.run();
+    </script>
+</body>
+</html>

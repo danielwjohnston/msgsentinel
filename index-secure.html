@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MsgSentinel - Privacy-focused message sanitization tool that filters harmful content from messages. All processing happens locally in your browser.">
+    <meta name="keywords" content="message filter, content sanitization, profanity filter, privacy, security">
+
+    <!-- Content Security Policy - Strict, no unsafe-inline -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self';
+                   script-src 'self';
+                   style-src 'self' https://fonts.googleapis.com;
+                   font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+                   img-src 'self' data:;
+                   connect-src 'self';">
+
+    <title>MsgSentinel - Protect Yourself from Harmful Messages</title>
+
+    <!-- Preconnect to external domains for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <!-- External stylesheets -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer">
+
+    <!-- Local stylesheets -->
+    <link rel="stylesheet" href="daniel-aesthetic.css">
+    <link rel="stylesheet" href="msgsentinel.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1>MsgSentinel</h1>
+                <div class="subtitle">Your shield against harmful messages</div>
+            </div>
+
+            <nav class="tabs" role="tablist" aria-label="Main navigation">
+                <button class="tab active"
+                        data-tab="sanitize"
+                        role="tab"
+                        aria-selected="true"
+                        aria-controls="sanitize-tab"
+                        id="tab-sanitize">
+                    <i class="fas fa-magic" aria-hidden="true"></i> Sanitize
+                </button>
+                <button class="tab"
+                        data-tab="history"
+                        role="tab"
+                        aria-selected="false"
+                        aria-controls="history-tab"
+                        id="tab-history">
+                    <i class="fas fa-history" aria-hidden="true"></i> History
+                </button>
+                <button class="tab"
+                        data-tab="settings"
+                        role="tab"
+                        aria-selected="false"
+                        aria-controls="settings-tab"
+                        id="tab-settings">
+                    <i class="fas fa-cog" aria-hidden="true"></i> Settings
+                </button>
+            </nav>
+
+            <div class="card-body">
+                <!-- Sanitize Tab -->
+                <section class="tab-content active"
+                         id="sanitize-tab"
+                         role="tabpanel"
+                         aria-labelledby="tab-sanitize">
+                    <div class="form-group">
+                        <label for="inputMessage">Paste the message you received:</label>
+                        <textarea id="inputMessage"
+                                  placeholder="Paste the message you want to sanitize here..."
+                                  maxlength="10000"
+                                  aria-describedby="message-hint"></textarea>
+                        <small id="message-hint" class="text-muted">Maximum 10,000 characters. Press Ctrl/Cmd+Enter to sanitize.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="result">Sanitized Message:</label>
+                        <div id="result"
+                             class="card"
+                             role="region"
+                             aria-live="polite"
+                             aria-label="Sanitized message output">
+                            <p class="text-muted">Your sanitized message will appear here...</p>
+                        </div>
+                    </div>
+
+                    <div class="stats" role="status" aria-live="polite">
+                        <div class="stat">
+                            <i class="fas fa-filter" aria-hidden="true"></i>
+                            <span id="filteredCount">0 words filtered</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                            <span id="safetyLevel">Safety: <span class="text-success">Safe</span></span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- History Tab -->
+                <section class="tab-content"
+                         id="history-tab"
+                         role="tabpanel"
+                         aria-labelledby="tab-history">
+                    <div id="historyList" role="list" aria-label="Sanitization history">
+                        <p class="text-muted">Your sanitization history will appear here.</p>
+                    </div>
+                </section>
+
+                <!-- Settings Tab -->
+                <section class="tab-content"
+                         id="settings-tab"
+                         role="tabpanel"
+                         aria-labelledby="tab-settings">
+                    <div class="form-group">
+                        <h3 id="filter-settings-heading">Filter Settings</h3>
+                        <div role="group" aria-labelledby="filter-settings-heading">
+                            <div class="setting-item">
+                                <div>
+                                    <div class="setting-label" id="profanity-label">Enable Profanity Filter</div>
+                                    <div class="setting-description">Block offensive language and slurs</div>
+                                </div>
+                                <label class="switch" aria-labelledby="profanity-label">
+                                    <input type="checkbox"
+                                           id="profanityFilter"
+                                           checked
+                                           aria-label="Enable profanity filter">
+                                    <span class="slider" aria-hidden="true"></span>
+                                </label>
+                            </div>
+
+                            <div class="setting-item">
+                                <div>
+                                    <div class="setting-label" id="threat-label">Filter Threats</div>
+                                    <div class="setting-description">Block threatening or harmful content</div>
+                                </div>
+                                <label class="switch" aria-labelledby="threat-label">
+                                    <input type="checkbox"
+                                           id="threatFilter"
+                                           checked
+                                           aria-label="Enable threat filter">
+                                    <span class="slider" aria-hidden="true"></span>
+                                </label>
+                            </div>
+
+                            <div class="setting-item">
+                                <div>
+                                    <div class="setting-label" id="attack-label">Filter Personal Attacks</div>
+                                    <div class="setting-description">Block personal insults and attacks</div>
+                                </div>
+                                <label class="switch" aria-labelledby="attack-label">
+                                    <input type="checkbox"
+                                           id="personalAttackFilter"
+                                           checked
+                                           aria-label="Enable personal attack filter">
+                                    <span class="slider" aria-hidden="true"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <h3 id="history-settings-heading">History Settings</h3>
+                        <div role="group" aria-labelledby="history-settings-heading">
+                            <div class="setting-item">
+                                <div>
+                                    <div class="setting-label" id="save-history-label">Save Message History</div>
+                                    <div class="setting-description">Store sanitized messages locally (encrypted)</div>
+                                </div>
+                                <label class="switch" aria-labelledby="save-history-label">
+                                    <input type="checkbox"
+                                           id="saveHistory"
+                                           checked
+                                           aria-label="Enable save history">
+                                    <span class="slider" aria-hidden="true"></span>
+                                </label>
+                            </div>
+
+                            <div class="setting-info">
+                                <p class="text-muted">
+                                    <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                                    History is encrypted and stored only on your device. Original harmful messages are never saved.
+                                </p>
+                            </div>
+
+                            <div>
+                                <button id="clearHistoryBtn"
+                                        class="btn btn-outline"
+                                        aria-label="Clear all history">
+                                    <i class="fas fa-trash" aria-hidden="true"></i> Clear History
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="card-footer">
+                <button class="btn btn-primary"
+                        id="sanitizeBtn"
+                        aria-label="Sanitize message">
+                    <i class="fas fa-magic" aria-hidden="true"></i> Sanitize Message
+                </button>
+                <div>
+                    <button class="btn btn-outline"
+                            id="copyBtn"
+                            aria-label="Copy sanitized message to clipboard">
+                        <i class="far fa-copy" aria-hidden="true"></i> Copy
+                    </button>
+                    <button class="btn btn-outline ml-2"
+                            id="clearBtn"
+                            aria-label="Clear input and output">
+                        <i class="fas fa-eraser" aria-hidden="true"></i> Clear
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center text-muted text-sm">
+            <p>MsgSentinel &copy; 2025 | All messages are processed locally in your browser</p>
+            <p class="text-muted">
+                <i class="fas fa-lock" aria-hidden="true"></i> Zero tracking • No servers • Full privacy
+            </p>
+        </footer>
+    </div>
+
+    <!-- ES6 Module -->
+    <script type="module" src="src/app.js"></script>
+</body>
+</html>
