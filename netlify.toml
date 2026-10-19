@@ -6,3 +6,10 @@
   for = "/*"
   [headers.values]
     Cache-Control = "public, max-age=3600"
+
+# Serve the sanitizer app at the site root; index.html is the design system showcase.
+[[redirects]]
+  from = "/"
+  to = "/msgsentinel.html"
+  status = 200
+  force = true

@@ -1,67 +1,28 @@
 # MsgSentinel
 
-A modern, privacy-focused message sanitization tool that helps protect you from harmful content in messages. Built with a clean, accessible interface and designed with security in mind.
-
-![MsgSentinel Screenshot](./screenshot.png)
+A privacy-focused message sanitization tool that masks harmful content in messages. Everything runs locally in your browser.
 
 ## Features
 
-- **Real-time Message Sanitization**: Instantly filter out harmful content
-- **Multiple Filter Categories**:
-  - Profanity filtering
-  - Threat detection
-  - Personal attack prevention
-- **Privacy First**: All processing happens locally in your browser
-- **Message History**: View your sanitization history (optional)
-- **Modern UI**: Clean, accessible interface with Neon Bauhaus Noir design system
-
-## Design System
-
-MsgSentinel uses a custom "Neon Bauhaus Noir" design system featuring:
-- Stark black and graphite base colors
-- Neon lime green accent (#00FF00)
-- Bauhaus-inspired geometric elements
-- High contrast typography
-- Subtle glows and shadows
-- Responsive layout
-- Dark theme optimized for readability
-
-## Getting Started
-
-### Prerequisites
-
-- Modern web browser (Chrome, Firefox, Safari, Edge)
-- Internet connection (for initial page load)
-
-### Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/msgsentinel.git
-   ```
-2. Open `index.html` in your web browser
-
-Or simply use the live demo at [msgsentinel.app](https://msgsentinel.app)
+- **Message sanitization**: harmful words and phrases are masked (`*****`) and highlighted
+- **Filter categories** (toggle each in Settings):
+  - Profanity
+  - Threats
+  - Personal attacks
+- **Privacy first**: all processing happens in your browser; nothing is sent anywhere
+- **Optional history**: off by default; when enabled, only the masked text is stored in this browser's localStorage
+- **Neon Bauhaus Noir design system**: stark black and graphite base, neon lime accent (`#00FF00`), geometric typography, dark theme
 
 ## Usage
 
-1. **Paste your message** in the input box
-2. Click **Sanitize Message** or press Enter
-3. View the sanitized result
-4. Use the **Copy** button to copy the sanitized text
-5. Check the **History** tab to view past sanitizations
-6. Adjust filters in the **Settings** tab
-5. Toggle different filter types in the **Settings** tab
+1. Paste your message into the input box
+2. Click **Sanitize Message**
+3. Review the result; filtered words are masked and highlighted
+4. Click **Copy** to copy the masked text
+5. Use the **History** tab to revisit past sanitizations (if enabled)
+6. Toggle filter categories and history in the **Settings** tab
 
-## Design System
-
-MsgSentinel uses a custom design system called "Neon Bauhaus Noir" featuring:
-
-- Stark black and graphite color scheme
-- Accent lime green highlights (#00FF00)
-- Clean, geometric typography
-- Responsive layout that works on all devices
-- Smooth animations and transitions
+Live site: the sanitizer is served at the site root (see `netlify.toml`).
 
 ## Development
 
@@ -69,31 +30,39 @@ MsgSentinel uses a custom design system called "Neon Bauhaus Noir" featuring:
 
 ```
 msgsentinel/
-├── index.html          # Main application
-├── daniel-aesthetic.css # Design system styles
-├── msgsentinel.html    # Standalone sanitizer component
-├── theme-preview.html  # Design system preview
-└── README.md           # Project documentation
+├── msgsentinel.html      # Sanitizer app (served at /)
+├── sanitizer.js          # Filtering core (word lists, masking, HTML escaping)
+├── index.html            # Design system showcase
+├── theme-preview.html    # Design system preview
+├── daniel-aesthetic.css  # Design system styles
+├── tests/                # Unit tests for sanitizer.js
+└── netlify.toml          # Netlify config
 ```
 
-### Building
+### Running locally
 
-No build step required! Just open `index.html` in a web browser.
+No build step. Open `msgsentinel.html` in a browser.
 
-## Contributing
+### Tests
 
-Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) for details.
+Requires Node.js 18+:
+
+```bash
+npm test
+```
+
+Tests run in CI on every pull request.
+
+### Deployment
+
+Pushes to `main` trigger a Netlify build through the `NETLIFY_BUILD_HOOK` repository secret (Settings → Secrets and variables → Actions).
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT. See [LICENSE](LICENSE).
 
 ## Acknowledgments
 
 - Built with vanilla JavaScript, HTML, and CSS
-- Uses [Inter](https://rsms.me/inter/) font by Rasmus Andersson
+- [Inter](https://rsms.me/inter/) font by Rasmus Andersson
 - Icons from [Font Awesome](https://fontawesome.com/)
-
----
-
-Made with ❤️ by [Your Name] | [Twitter](https://twitter.com/yourhandle) | [Website](https://yourwebsite.com)

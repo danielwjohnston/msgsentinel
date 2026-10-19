@@ -7,4 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Netlify build hook
-        run: curl -s -X POST https://api.netlify.com/build_hooks/69ced7417fbdada6fc176506
+        env:
+          NETLIFY_BUILD_HOOK: ${{ secrets.NETLIFY_BUILD_HOOK }}
+        run: |
+          if [ -z "$NETLIFY_BUILD_HOOK" ]; then
+            echo "::warning::NETLIFY_BUILD_HOOK secret is not set; skipping deploy trigger."
+            exit 0
+          fi
+          curl -sSf -X POST "$NETLIFY_BUILD_HOOK"
