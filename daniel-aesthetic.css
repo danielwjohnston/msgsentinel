@@ -116,7 +116,8 @@ h2 { font-size: var(--size-800); }
 h3 { font-size: var(--size-700); }
 h4 { font-size: var(--size-600); }
 p, ul, ol { font-size: var(--size-400); color: var(--text); }
-.muted { color: var(--muted); }
+.muted,
+.text-muted { color: var(--muted); }
 
 .hr {
   height: 1px;
@@ -191,7 +192,8 @@ p, ul, ol { font-size: var(--size-400); color: var(--text); }
 .btn:active { transform: translateY(0); }
 .btn:disabled { opacity: .6; cursor: not-allowed; }
 
-.btn.outline {
+.btn.outline,
+.btn-outline {
   --_bg: transparent; --_fg: var(--accent);
   background: linear-gradient(var(--surface-2), var(--surface-2)) padding-box,
               linear-gradient(90deg, var(--accent-700), var(--accent-300)) border-box;
@@ -204,6 +206,11 @@ p, ul, ol { font-size: var(--size-400); color: var(--text); }
   color: var(--_fg);
   background: transparent;
   border: 1px solid var(--line);
+}
+
+.btn-sm {
+  padding: .5rem 1rem;
+  font-size: var(--size-200);
 }
 
 /* ---------- Form Elements ---------- */
