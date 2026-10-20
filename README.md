@@ -28,9 +28,9 @@ A privacy-focused message sanitization tool that masks harmful content in messag
 
 ```
 msgsentinel/
-├── msgsentinel.html      # Sanitizer app
+├── index.html            # Sanitizer app
 ├── sanitizer.js          # Filtering core (word lists, masking, HTML escaping)
-├── index.html            # Design system showcase
+├── design-system.html    # Design system showcase
 ├── theme-preview.html    # Design system preview
 ├── daniel-aesthetic.css  # Design system styles
 └── tests/                # Unit tests for sanitizer.js
@@ -38,7 +38,11 @@ msgsentinel/
 
 ### Running locally
 
-No build step. Open `msgsentinel.html` in a browser.
+No build step. Open `index.html` in a browser.
+
+### Hosting
+
+Served with GitHub Pages from the `main` branch root (Settings → Pages).
 
 ### Tests
 

@@ -1,182 +1,746 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MsgSentinel Design System</title>
+    <title>MsgSentinel - Protect Yourself from Harmful Messages</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="daniel-aesthetic.css">
     <style>
+        /* Custom styles specific to the application */
         body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg);
+            color: var(--text);
+        }
+        
+        .container {
+            flex: 1;
             max-width: 1200px;
             margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        /* Card styles */
+        .card {
+            margin-bottom: 2rem;
+        }
+        
+        .card-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--line);
+        }
+        
+        .card-header h1 {
+            margin: 0;
+            color: var(--accent);
+            font-size: 2rem;
+        }
+        
+        .card-header .subtitle {
+            color: var(--muted);
+            margin-top: 0.5rem;
+        }
+        
+        .card-body {
             padding: 2rem;
         }
         
-        .grid {
-            display: grid;
-            gap: 2rem;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        .card-footer {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid var(--line);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
-        .component {
-            background: var(--surface);
-            border-radius: var(--radius);
-            padding: 1.5rem;
-            border: 1px solid var(--line);
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--line);
+            padding: 0 2rem;
         }
         
-        h1, h2, h3, h4 {
-            margin: 0 0 1rem;
+        .tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            color: var(--muted);
+            font-weight: 500;
+            position: relative;
+            transition: color 0.2s var(--ease);
+        }
+        
+        .tab:after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: transparent;
+            transition: background-color 0.2s var(--ease);
+        }
+        
+        .tab:hover {
+            color: var(--text);
+        }
+        
+        .tab.active {
             color: var(--accent);
         }
         
-        .color-swatch {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 1rem;
+        .tab.active:after {
+            background: var(--accent);
         }
         
-        .color-box {
-            height: 60px;
-            border-radius: var(--radius);
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Form elements */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
             margin-bottom: 0.5rem;
-            display: flex;
+            font-weight: 500;
+        }
+        
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: var(--surface-2);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+        }
+        
+        textarea:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(0, 255, 0, 0.2);
+        }
+        
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        /* Buttons */
+        .btn {
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-family: monospace;
-            font-size: 0.8rem;
-            color: white;
-            text-shadow: 0 0 2px rgba(0,0,0,0.5);
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--radius);
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s var(--ease);
         }
         
-        .spacing-demo {
-            background: var(--surface-2);
-            height: 20px;
+        .btn i {
+            margin-right: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            color: var(--bg);
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent-700);
+            transform: translateY(-1px);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+        
+        .btn-outline:hover {
+            background: rgba(0, 255, 0, 0.1);
+        }
+        
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+        
+        /* Stats */
+        .stats {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+        
+        .stat {
+            display: flex;
+            align-items: center;
+        }
+        
+        .stat i {
+            margin-right: 0.5rem;
+            color: var(--accent);
+        }
+        
+        /* History items */
+        .history-item {
+            padding: 1rem;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
             margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.2s var(--ease);
+        }
+        
+        .history-item:hover {
+            border-color: var(--accent);
+        }
+        
+        .history-item p {
+            margin: 0 0 0.5rem;
+        }
+        
+        .history-time {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+        
+        /* Settings */
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--line);
+        }
+        
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+        
+        .setting-label {
+            font-weight: 500;
+        }
+        
+        .setting-description {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-top: 0.25rem;
+        }
+        
+        /* Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--surface-3);
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--accent);
+        }
+        
+        input:focus + .slider {
+            box-shadow: 0 0 1px var(--accent);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .tabs {
+                overflow-x: auto;
+                padding: 0 1rem;
+            }
+            
+            .tab {
+                padding: 1rem;
+                white-space: nowrap;
+            }
+            
+            .card-body {
+                padding: 1.5rem 1rem;
+            }
+            
+            .card-footer {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+        }
+        .filtered-word {
+            background: rgba(255, 0, 0, 0.2);
+            color: var(--danger);
+            padding: 0 2px;
+            border-radius: 3px;
         }
     </style>
 </head>
 <body>
-    <header class="mb-4">
-        <h1 class="mb-1">MsgSentinel Design System</h1>
-        <p class="text-muted">Neon Bauhaus Noir Theme</p>
-    </header>
-    
-    <div class="grid">
-        <!-- Colors -->
-        <div class="component">
-            <h2>Colors</h2>
-            <div class="color-swatch">
-                <div class="color-box" style="background: var(--bg)">--bg</div>
-                <span>Background</span>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1>MsgSentinel</h1>
+                <div class="subtitle">Your shield against harmful messages</div>
             </div>
-            <div class="color-swatch">
-                <div class="color-box" style="background: var(--surface)">--surface</div>
-                <span>Surface</span>
-            </div>
-            <div class="color-swatch">
-                <div class="color-box" style="background: var(--accent); color: var(--bg)">--accent</div>
-                <span>Accent (#00FF00)</span>
-            </div>
-            <div class="color-swatch">
-                <div class="color-box" style="background: var(--text); color: var(--bg)">--text</div>
-                <span>Text</span>
-            </div>
-            <div class="color-swatch">
-                <div class="color-box" style="background: var(--muted); color: var(--bg)">--muted</div>
-                <span>Muted Text</span>
-            </div>
-        </div>
-        
-        <!-- Typography -->
-        <div class="component">
-            <h2>Typography</h2>
-            <h1>Heading 1</h1>
-            <h2>Heading 2</h2>
-            <h3>Heading 3</h3>
-            <h4>Heading 4</h4>
-            <p>Body text - Inter is a highly readable typeface, designed for clarity and legibility.</p>
-            <p class="text-muted">Muted text for secondary information.</p>
-            <p><a href="#">Link style</a></p>
-        </div>
-        
-        <!-- Buttons -->
-        <div class="component">
-            <h2>Buttons</h2>
-            <button class="btn btn-primary mb-2">
-                <i class="fas fa-magic"></i> Primary Button
-            </button><br>
-            <button class="btn btn-outline">
-                <i class="fas fa-cog"></i> Outline Button
-            </button>
-            <div class="mt-2">
-                <button class="btn btn-primary" disabled>Disabled</button>
-                <button class="btn btn-outline" disabled>Disabled</button>
-            </div>
-        </div>
-        
-        <!-- Form Elements -->
-        <div class="component">
-            <h2>Form Elements</h2>
-            <div class="form-group">
-                <label>Text Input</label>
-                <input type="text" class="w-full" placeholder="Enter text...">
-            </div>
-            <div class="form-group">
-                <label>Textarea</label>
-                <textarea class="w-full" rows="3" placeholder="Enter message..."></textarea>
-            </div>
-            <div class="form-group">
-                <label class="flex items-center">
-                    <input type="checkbox" checked>
-                    <span class="ml-2">Checkbox</span>
-                </label>
-            </div>
-        </div>
-        
-        <!-- Cards -->
-        <div class="component">
-            <h2>Cards</h2>
-            <div class="card">
-                <div class="card-header">
-                    <h3>Card Title</h3>
-                    <p class="text-muted">Card subtitle</p>
+            
+            <div class="tabs">
+                <div class="tab active" data-tab="sanitize">
+                    <i class="fas fa-magic"></i> Sanitize
                 </div>
-                <div class="card-body">
-                    <p>Card content goes here. This is a simple card component with a header and body.</p>
+                <div class="tab" data-tab="history">
+                    <i class="fas fa-history"></i> History
                 </div>
-                <div class="card-footer">
-                    <button class="btn btn-sm btn-outline">Action</button>
+                <div class="tab" data-tab="settings">
+                    <i class="fas fa-cog"></i> Settings
                 </div>
             </div>
+            
+            <div class="card-body">
+                <!-- Sanitize Tab -->
+                <div class="tab-content active" id="sanitize-tab">
+                    <div class="form-group">
+                        <label for="inputMessage">Paste the message you received:</label>
+                        <textarea id="inputMessage" placeholder="Paste the message you want to sanitize here..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Sanitized Message:</label>
+                        <div id="result" class="card" style="min-height: 100px; padding: 1rem;">
+                            <p class="text-muted">Your sanitized message will appear here...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stats">
+                        <div class="stat">
+                            <i class="fas fa-filter"></i>
+                            <span id="filteredCount">0 words filtered</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-shield-alt"></i>
+                            <span id="safetyLevel">Safety: <span class="text-success">Safe</span></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- History Tab -->
+                <div class="tab-content" id="history-tab">
+                    <div id="historyList">
+                        <p class="text-muted">Your sanitization history will appear here.</p>
+                    </div>
+                </div>
+                
+                <!-- Settings Tab -->
+                <div class="tab-content" id="settings-tab">
+                    <div class="form-group">
+                        <h3>Filter Settings</h3>
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Enable Profanity Filter</div>
+                                <div class="setting-description">Block offensive language and slurs</div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="profanityFilter" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Filter Threats</div>
+                                <div class="setting-description">Block threatening or harmful content</div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="threatFilter" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Filter Personal Attacks</div>
+                                <div class="setting-description">Block personal insults and attacks</div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="personalAttackFilter" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" style="margin-top: 2rem;">
+                        <h3>History Settings</h3>
+                        <div class="setting-item">
+                            <div>
+                                <div class="setting-label">Save Message History</div>
+                                <div class="setting-description">Store masked (sanitized) messages in this browser only</div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="saveHistory">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div style="margin-top: 1.5rem;">
+                            <button id="clearHistoryBtn" class="btn btn-outline">
+                                <i class="fas fa-trash"></i> Clear History
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-footer">
+                <button class="btn btn-primary" id="sanitizeBtn">
+                    <i class="fas fa-magic"></i> Sanitize Message
+                </button>
+                <div>
+                    <button class="btn btn-outline" id="copyBtn">
+                        <i class="far fa-copy"></i> Copy
+                    </button>
+                    <button class="btn btn-outline ml-2" id="clearBtn">
+                        <i class="fas fa-eraser"></i> Clear
+                    </button>
+                </div>
+            </div>
         </div>
         
-        <!-- Alerts -->
-        <div class="component">
-            <h2>Alerts</h2>
-            <div class="alert">
-                <i class="fas fa-info-circle"></i>
-                <span>This is an informational message.</span>
-            </div>
-            <div class="alert alert-success">
-                <i class="fas fa-check-circle"></i>
-                <span>Operation completed successfully.</span>
-            </div>
-            <div class="alert alert-warning">
-                <i class="fas fa-exclamation-triangle"></i>
-                <span>This is a warning message.</span>
-            </div>
-            <div class="alert alert-danger">
-                <i class="fas fa-exclamation-circle"></i>
-                <span>An error occurred. Please try again.</span>
-            </div>
-        </div>
+        <footer class="text-center text-muted text-sm" style="margin-top: 2rem;">
+            <p>MsgSentinel &copy; 2023 | All messages are processed locally in your browser</p>
+        </footer>
     </div>
-    
-    <footer class="mt-8 text-center text-muted text-sm">
-        <p>MsgSentinel Design System &copy; 2023</p>
-    </footer>
+
+    <script src="sanitizer.js"></script>
+    <script>
+        // DOM Elements
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const inputMessage = document.getElementById('inputMessage');
+        const resultElement = document.getElementById('result');
+        const sanitizeBtn = document.getElementById('sanitizeBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+        const historyList = document.getElementById('historyList');
+        const filteredCountElement = document.getElementById('filteredCount');
+        const safetyLevelElement = document.getElementById('safetyLevel');
+        const profanityFilter = document.getElementById('profanityFilter');
+        const threatFilter = document.getElementById('threatFilter');
+        const personalAttackFilter = document.getElementById('personalAttackFilter');
+        const saveHistory = document.getElementById('saveHistory');
+        
+        // Masked plain text of the current result, used by Copy
+        let sanitizedText = '';
+        
+        // Initialize the app
+        function init() {
+            // Load settings
+            loadSettings();
+            
+            // Load history
+            renderHistory();
+            
+            // Set up event listeners
+            tabs.forEach(tab => {
+                tab.addEventListener('click', switchTab);
+            });
+            
+            sanitizeBtn.addEventListener('click', sanitizeMessage);
+            copyBtn.addEventListener('click', copyToClipboard);
+            clearBtn.addEventListener('click', clearMessage);
+            clearHistoryBtn.addEventListener('click', clearHistory);
+            
+            // Settings change listeners
+            profanityFilter.addEventListener('change', saveSettings);
+            threatFilter.addEventListener('change', saveSettings);
+            personalAttackFilter.addEventListener('change', saveSettings);
+            saveHistory.addEventListener('change', saveSettings);
+            
+            // Set initial tab
+            switchTab({ target: document.querySelector('.tab[data-tab="sanitize"]') });
+        }
+        
+        // Switch between tabs
+        function switchTab(e) {
+            const tab = e.target.closest('.tab');
+            if (!tab) return;
+            
+            // Update active tab
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            // Show corresponding content
+            const tabId = tab.getAttribute('data-tab');
+            tabContents.forEach(content => {
+                content.classList.toggle('active', content.id === `${tabId}-tab`);
+            });
+        }
+        
+        // Sanitize the message
+        function sanitizeMessage() {
+            const input = inputMessage.value.trim();
+            
+            if (!input) {
+                showEmptyState('Please enter a message to sanitize.');
+                return;
+            }
+            
+            // Apply filters based on settings
+            const categories = [];
+            if (profanityFilter.checked) categories.push('profanity');
+            if (threatFilter.checked) categories.push('threats');
+            if (personalAttackFilter.checked) categories.push('personalAttacks');
+            
+            const result = MsgSentinel.sanitize(input, categories);
+            sanitizedText = result.text;
+            
+            // Update UI
+            filteredCountElement.textContent = `${result.count} words filtered`;
+            updateSafetyLevel(result.count, input.length);
+            renderResult(result.html);
+            
+            // Save to history if enabled
+            if (saveHistory.checked && result.count > 0) {
+                saveToHistory(result.text, result.count);
+            }
+        }
+        
+        // Render already-escaped HTML, preserving line breaks
+        function renderResult(safeHtml) {
+            const formatted = safeHtml
+                .replace(/\n\s*\n/g, '</p><p>')  // Double newlines become paragraph breaks
+                .replace(/\n/g, '<br>');       // Single newlines become line breaks
+            resultElement.innerHTML = `<p>${formatted}</p>`;
+        }
+        
+        // Update safety level indicator
+        function updateSafetyLevel(filteredCount, inputLength) {
+            const ratio = filteredCount / (inputLength / 5); // Rough estimate of word count
+            
+            if (filteredCount === 0) {
+                safetyLevelElement.innerHTML = 'Safety: <span class="text-success">Safe</span>';
+            } else if (ratio < 0.1) {
+                safetyLevelElement.innerHTML = 'Safety: <span class="text-success">Mostly Safe</span>';
+            } else if (ratio < 0.3) {
+                safetyLevelElement.innerHTML = 'Safety: <span class="text-warning">Caution</span>';
+            } else {
+                safetyLevelElement.innerHTML = 'Safety: <span class="text-danger">Warning</span>';
+            }
+        }
+        
+        // Show empty state
+        function showEmptyState(message) {
+            sanitizedText = '';
+            resultElement.innerHTML = `<p class="text-muted">${MsgSentinel.escapeHtml(message)}</p>`;
+        }
+        
+        // Clear the input and output
+        function clearMessage() {
+            inputMessage.value = '';
+            sanitizedText = '';
+            showEmptyState('Your sanitized message will appear here...');
+            filteredCountElement.textContent = '0 words filtered';
+            safetyLevelElement.innerHTML = 'Safety: <span class="text-success">Safe</span>';
+        }
+        
+        // Copy sanitized message to clipboard
+        function copyToClipboard() {
+            const resultText = sanitizedText.trim();
+            
+            if (!resultText) {
+                alert('No sanitized message to copy!');
+                return;
+            }
+            
+            navigator.clipboard.writeText(resultText).then(() => {
+                // Show a temporary success message
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+                alert('Failed to copy text. Please try again.');
+            });
+        }
+        
+        // Save message to history
+        function saveToHistory(sanitized, filteredCount) {
+            const history = loadHistory();
+            const now = new Date();
+            
+            const historyItem = {
+                id: Date.now(),
+                sanitized,
+                filteredCount,
+                date: now.toLocaleDateString(),
+                time: now.toLocaleTimeString(),
+                timestamp: now.getTime()
+            };
+            
+            // Add to beginning of array (most recent first)
+            history.unshift(historyItem);
+            
+            // Keep only the last 50 items
+            if (history.length > 50) {
+                history.pop();
+            }
+            
+            localStorage.setItem('messageHistory', JSON.stringify(history));
+            renderHistory();
+        }
+        
+        // Render message history
+        function loadHistory() {
+            try {
+                const history = JSON.parse(localStorage.getItem('messageHistory') || '[]');
+                return Array.isArray(history) ? history.filter(h => h && typeof h.sanitized === 'string' && !('original' in h)) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+        
+        function renderHistory() {
+            const history = loadHistory();
+            
+            if (history.length === 0) {
+                historyList.innerHTML = '<p class="text-muted">Your sanitization history will appear here.</p>';
+                return;
+            }
+            
+            const historyItems = history.map(item => `
+                <div class="history-item" data-id="${Number(item.id)}">
+                    <p>${MsgSentinel.escapeHtml(item.sanitized.substring(0, 100))}${item.sanitized.length > 100 ? '...' : ''}</p>
+                    <div class="history-time">
+                        ${MsgSentinel.escapeHtml(item.date)} at ${MsgSentinel.escapeHtml(item.time)} • ${Number(item.filteredCount)} filtered item${item.filteredCount !== 1 ? 's' : ''}
+                    </div>
+                </div>
+            `).join('');
+            
+            historyList.innerHTML = historyItems;
+            
+            // Add click handlers to history items
+            document.querySelectorAll('.history-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const id = parseInt(item.getAttribute('data-id'));
+                    const historyItem = history.find(h => h.id === id);
+                    if (historyItem) {
+                        // Switch to sanitize tab
+                        document.querySelector('.tab[data-tab="sanitize"]').click();
+                        
+                        // Fill in the input and show the result
+                        inputMessage.value = historyItem.sanitized;
+                        sanitizedText = historyItem.sanitized;
+                        renderResult(MsgSentinel.escapeHtml(historyItem.sanitized));
+                        filteredCountElement.textContent = `${historyItem.filteredCount} words filtered`;
+                        updateSafetyLevel(historyItem.filteredCount, historyItem.sanitized.length);
+                        
+                        // Scroll to top
+                        window.scrollTo(0, 0);
+                    }
+                });
+            });
+        }
+        
+        // Clear history
+        function clearHistory() {
+            if (confirm('Are you sure you want to clear your history? This cannot be undone.')) {
+                localStorage.removeItem('messageHistory');
+                renderHistory();
+            }
+        }
+        
+        // Save settings to localStorage
+        function saveSettings() {
+            const settings = {
+                profanityFilter: profanityFilter.checked,
+                threatFilter: threatFilter.checked,
+                personalAttackFilter: personalAttackFilter.checked,
+                saveHistory: saveHistory.checked
+            };
+            
+            localStorage.setItem('msgSentinelSettings', JSON.stringify(settings));
+        }
+        
+        // Load settings from localStorage
+        function loadSettings() {
+            let settings = {};
+            try {
+                settings = JSON.parse(localStorage.getItem('msgSentinelSettings') || '{}') || {};
+            } catch (e) {
+                settings = {};
+            }
+            
+            // Apply saved settings or use defaults
+            profanityFilter.checked = settings.profanityFilter !== undefined ? settings.profanityFilter : true;
+            threatFilter.checked = settings.threatFilter !== undefined ? settings.threatFilter : true;
+            personalAttackFilter.checked = settings.personalAttackFilter !== undefined ? settings.personalAttackFilter : true;
+            saveHistory.checked = settings.saveHistory === true;
+        }
+        
+        // Initialize the app when the DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
 </body>
 </html>

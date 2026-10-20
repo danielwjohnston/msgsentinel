@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MsgSentinel Design System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="daniel-aesthetic.css">
+    <style>
+        body {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .grid {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+        
+        .component {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            border: 1px solid var(--line);
+        }
+        
+        h1, h2, h3, h4 {
+            margin: 0 0 1rem;
+            color: var(--accent);
+        }
+        
+        .color-swatch {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1rem;
+        }
+        
+        .color-box {
+            height: 60px;
+            border-radius: var(--radius);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: white;
+            text-shadow: 0 0 2px rgba(0,0,0,0.5);
+        }
+        
+        .spacing-demo {
+            background: var(--surface-2);
+            height: 20px;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="mb-4">
+        <h1 class="mb-1">MsgSentinel Design System</h1>
+        <p class="text-muted">Neon Bauhaus Noir Theme</p>
+    </header>
+    
+    <div class="grid">
+        <!-- Colors -->
+        <div class="component">
+            <h2>Colors</h2>
+            <div class="color-swatch">
+                <div class="color-box" style="background: var(--bg)">--bg</div>
+                <span>Background</span>
+            </div>
+            <div class="color-swatch">
+                <div class="color-box" style="background: var(--surface)">--surface</div>
+                <span>Surface</span>
+            </div>
+            <div class="color-swatch">
+                <div class="color-box" style="background: var(--accent); color: var(--bg)">--accent</div>
+                <span>Accent (#00FF00)</span>
+            </div>
+            <div class="color-swatch">
+                <div class="color-box" style="background: var(--text); color: var(--bg)">--text</div>
+                <span>Text</span>
+            </div>
+            <div class="color-swatch">
+                <div class="color-box" style="background: var(--muted); color: var(--bg)">--muted</div>
+                <span>Muted Text</span>
+            </div>
+        </div>
+        
+        <!-- Typography -->
+        <div class="component">
+            <h2>Typography</h2>
+            <h1>Heading 1</h1>
+            <h2>Heading 2</h2>
+            <h3>Heading 3</h3>
+            <h4>Heading 4</h4>
+            <p>Body text - Inter is a highly readable typeface, designed for clarity and legibility.</p>
+            <p class="text-muted">Muted text for secondary information.</p>
+            <p><a href="#">Link style</a></p>
+        </div>
+        
+        <!-- Buttons -->
+        <div class="component">
+            <h2>Buttons</h2>
+            <button class="btn btn-primary mb-2">
+                <i class="fas fa-magic"></i> Primary Button
+            </button><br>
+            <button class="btn btn-outline">
+                <i class="fas fa-cog"></i> Outline Button
+            </button>
+            <div class="mt-2">
+                <button class="btn btn-primary" disabled>Disabled</button>
+                <button class="btn btn-outline" disabled>Disabled</button>
+            </div>
+        </div>
+        
+        <!-- Form Elements -->
+        <div class="component">
+            <h2>Form Elements</h2>
+            <div class="form-group">
+                <label>Text Input</label>
+                <input type="text" class="w-full" placeholder="Enter text...">
+            </div>
+            <div class="form-group">
+                <label>Textarea</label>
+                <textarea class="w-full" rows="3" placeholder="Enter message..."></textarea>
+            </div>
+            <div class="form-group">
+                <label class="flex items-center">
+                    <input type="checkbox" checked>
+                    <span class="ml-2">Checkbox</span>
+                </label>
+            </div>
+        </div>
+        
+        <!-- Cards -->
+        <div class="component">
+            <h2>Cards</h2>
+            <div class="card">
+                <div class="card-header">
+                    <h3>Card Title</h3>
+                    <p class="text-muted">Card subtitle</p>
+                </div>
+                <div class="card-body">
+                    <p>Card content goes here. This is a simple card component with a header and body.</p>
+                </div>
+                <div class="card-footer">
+                    <button class="btn btn-sm btn-outline">Action</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Alerts -->
+        <div class="component">
+            <h2>Alerts</h2>
+            <div class="alert">
+                <i class="fas fa-info-circle"></i>
+                <span>This is an informational message.</span>
+            </div>
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle"></i>
+                <span>Operation completed successfully.</span>
+            </div>
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>This is a warning message.</span>
+            </div>
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-circle"></i>
+                <span>An error occurred. Please try again.</span>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="mt-8 text-center text-muted text-sm">
+        <p>MsgSentinel Design System &copy; 2023</p>
+    </footer>
+</body>
+</html>
