@@ -22,21 +22,18 @@ A privacy-focused message sanitization tool that masks harmful content in messag
 5. Use the **History** tab to revisit past sanitizations (if enabled)
 6. Toggle filter categories and history in the **Settings** tab
 
-Live site: the sanitizer is served at the site root (see `netlify.toml`).
-
 ## Development
 
 ### Project Structure
 
 ```
 msgsentinel/
-├── msgsentinel.html      # Sanitizer app (served at /)
+├── msgsentinel.html      # Sanitizer app
 ├── sanitizer.js          # Filtering core (word lists, masking, HTML escaping)
 ├── index.html            # Design system showcase
 ├── theme-preview.html    # Design system preview
 ├── daniel-aesthetic.css  # Design system styles
-├── tests/                # Unit tests for sanitizer.js
-└── netlify.toml          # Netlify config
+└── tests/                # Unit tests for sanitizer.js
 ```
 
 ### Running locally
@@ -52,10 +49,6 @@ npm test
 ```
 
 Tests run in CI on every pull request.
-
-### Deployment
-
-Pushes to `main` trigger a Netlify build through the `NETLIFY_BUILD_HOOK` repository secret (Settings → Secrets and variables → Actions).
 
 ## License
 
