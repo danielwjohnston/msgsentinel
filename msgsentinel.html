@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MsgSentinel - Protect Yourself from Harmful Messages</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="daniel-aesthetic.css">
     <style>
         /* Custom styles specific to the application */
@@ -328,6 +328,12 @@
                 gap: 0.75rem;
             }
         }
+        .filtered-word {
+            background: rgba(255, 0, 0, 0.2);
+            color: var(--danger);
+            padding: 0 2px;
+            border-radius: 3px;
+        }
     </style>
 </head>
 <body>
@@ -427,10 +433,10 @@
                         <div class="setting-item">
                             <div>
                                 <div class="setting-label">Save Message History</div>
-                                <div class="setting-description">Store your sanitized messages locally</div>
+                                <div class="setting-description">Store masked (sanitized) messages in this browser only</div>
                             </div>
                             <label class="switch">
-                                <input type="checkbox" id="saveHistory" checked>
+                                <input type="checkbox" id="saveHistory">
                                 <span class="slider"></span>
                             </label>
                         </div>
@@ -464,26 +470,8 @@
         </footer>
     </div>
 
+    <script src="sanitizer.js"></script>
     <script>
-        // Enhanced word lists for filtering
-        const filterLists = {
-            profanity: [
-                // Profanity word list (truncated for brevity)
-                '\b(ass|arse|asshole|arsehole|bitch|bastard|bollocks|bullshit|bitchy|bitching|blowjob|blow job|blow me|blowjob|blow jobs|blowjobs|blow job|blowjob|blow jobs|blowjobs|blow job|blowjob|blow jobs|blowjobs|blow job|blowjob|blow jobs|blowjobs)\b',
-                // Add more words as needed
-            ],
-            threats: [
-                // Threatening language patterns
-                '\b(kill|harm|hurt|attack|beat|fight|stab|shoot|bomb|murder|threat|threaten|threatening|violent|violence|rape|raping|raped|rapist|abuse|abusing|abused|abuser|harass|harassing|harassed|harassment|stalking|stalker|stalk|stalked|revenge|dox|doxx|doxxing|doxing|doxed|doxxed|swat|swatting|swatted|swatter)\b',
-                // Add more patterns as needed
-            ],
-            personalAttacks: [
-                // Personal attack patterns
-                '\b(idiot|moron|stupid|dumb|retard|retarded|ugly|fat|useless|worthless|failure|loser|hate you|i hate you|i hope you die|i wish you were dead|kill yourself|go die|you should die|you\'re a waste|you\'re pathetic|you\'re worthless|you\'re useless|you\'re a loser|you\'re a failure|you\'re a mistake|you\'re garbage|you\'re trash|you\'re a waste of space|you\'re a waste of oxygen|you\'re a waste of time|you\'re a waste of life|you\'re a waste of skin|you\'re a waste of air|you\'re a waste of breath|you\'re a waste of space|you\'re a waste of time|you\'re a waste of life|you\'re a waste of skin|you\'re a waste of air|you\'re a waste of breath)\b',
-                // Add more patterns as needed
-            ]
-        };
-        
         // DOM Elements
         const tabs = document.querySelectorAll('.tab');
         const tabContents = document.querySelectorAll('.tab-content');
@@ -500,6 +488,9 @@
         const threatFilter = document.getElementById('threatFilter');
         const personalAttackFilter = document.getElementById('personalAttackFilter');
         const saveHistory = document.getElementById('saveHistory');
+        
+        // Masked plain text of the current result, used by Copy
+        let sanitizedText = '';
         
         // Initialize the app
         function init() {
@@ -554,67 +545,32 @@
                 return;
             }
             
-            let sanitized = input;
-            let filteredWords = 0;
-            
             // Apply filters based on settings
-            if (profanityFilter.checked) {
-                const result = applyFilter(sanitized, filterLists.profanity);
-                sanitized = result.text;
-                filteredWords += result.count;
-            }
+            const categories = [];
+            if (profanityFilter.checked) categories.push('profanity');
+            if (threatFilter.checked) categories.push('threats');
+            if (personalAttackFilter.checked) categories.push('personalAttacks');
             
-            if (threatFilter.checked) {
-                const result = applyFilter(sanitized, filterLists.threats);
-                sanitized = result.text;
-                filteredWords += result.count;
-            }
-            
-            if (personalAttackFilter.checked) {
-                const result = applyFilter(sanitized, filterLists.personalAttacks);
-                sanitized = result.text;
-                filteredWords += result.count;
-            }
+            const result = MsgSentinel.sanitize(input, categories);
+            sanitizedText = result.text;
             
             // Update UI
-            filteredCountElement.textContent = `${filteredWords} words filtered`;
-            updateSafetyLevel(filteredWords, input.length);
-            
-            // Format the output
-            if (sanitized.trim() === '') {
-                showEmptyState('This message was filtered out as it contained harmful content.');
-            } else {
-                // Preserve line breaks and formatting
-                const formattedMessage = sanitized
-                    .replace(/\n\s*\n/g, '</p><p>')  // Double newlines become paragraph breaks
-                    .replace(/\n/g, '<br>');       // Single newlines become line breaks
-                
-                resultElement.innerHTML = `<p>${formattedMessage}</p>`;
-            }
+            filteredCountElement.textContent = `${result.count} words filtered`;
+            updateSafetyLevel(result.count, input.length);
+            renderResult(result.html);
             
             // Save to history if enabled
-            if (saveHistory.checked && filteredWords > 0) {
-                saveToHistory(input, sanitized, filteredWords);
+            if (saveHistory.checked && result.count > 0) {
+                saveToHistory(result.text, result.count);
             }
         }
         
-        // Apply a filter to the text
-        function applyFilter(text, wordList) {
-            let filteredText = text;
-            let count = 0;
-            
-            wordList.forEach(word => {
-                const regex = new RegExp(word, 'gi');
-                const matches = filteredText.match(regex) || [];
-                count += matches.length;
-                filteredText = filteredText.replace(regex, match => {
-                    return '<span class="filtered-word" style="background: rgba(255, 0, 0, 0.2); color: var(--danger); padding: 0 2px; border-radius: 3px; text-decoration: line-through;" title="Filtered word">' + 
-                           '<span style="opacity: 0.5;">' + match + '</span>' + 
-                           '</span>';
-                });
-            });
-            
-            return { text: filteredText, count };
+        // Render already-escaped HTML, preserving line breaks
+        function renderResult(safeHtml) {
+            const formatted = safeHtml
+                .replace(/\n\s*\n/g, '</p><p>')  // Double newlines become paragraph breaks
+                .replace(/\n/g, '<br>');       // Single newlines become line breaks
+            resultElement.innerHTML = `<p>${formatted}</p>`;
         }
         
         // Update safety level indicator
@@ -634,12 +590,14 @@
         
         // Show empty state
         function showEmptyState(message) {
-            resultElement.innerHTML = `<p class="text-muted">${message}</p>`;
+            sanitizedText = '';
+            resultElement.innerHTML = `<p class="text-muted">${MsgSentinel.escapeHtml(message)}</p>`;
         }
         
         // Clear the input and output
         function clearMessage() {
             inputMessage.value = '';
+            sanitizedText = '';
             showEmptyState('Your sanitized message will appear here...');
             filteredCountElement.textContent = '0 words filtered';
             safetyLevelElement.innerHTML = 'Safety: <span class="text-success">Safe</span>';
@@ -647,9 +605,9 @@
         
         // Copy sanitized message to clipboard
         function copyToClipboard() {
-            const resultText = resultElement.textContent.trim();
+            const resultText = sanitizedText.trim();
             
-            if (!resultText || resultText.includes('Your sanitized message will appear here')) {
+            if (!resultText) {
                 alert('No sanitized message to copy!');
                 return;
             }
@@ -668,13 +626,12 @@
         }
         
         // Save message to history
-        function saveToHistory(original, sanitized, filteredCount) {
-            const history = JSON.parse(localStorage.getItem('messageHistory') || '[]');
+        function saveToHistory(sanitized, filteredCount) {
+            const history = loadHistory();
             const now = new Date();
             
             const historyItem = {
                 id: Date.now(),
-                original,
                 sanitized,
                 filteredCount,
                 date: now.toLocaleDateString(),
@@ -695,8 +652,17 @@
         }
         
         // Render message history
+        function loadHistory() {
+            try {
+                const history = JSON.parse(localStorage.getItem('messageHistory') || '[]');
+                return Array.isArray(history) ? history.filter(h => h && typeof h.sanitized === 'string' && !('original' in h)) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+        
         function renderHistory() {
-            const history = JSON.parse(localStorage.getItem('messageHistory') || '[]');
+            const history = loadHistory();
             
             if (history.length === 0) {
                 historyList.innerHTML = '<p class="text-muted">Your sanitization history will appear here.</p>';
@@ -704,10 +670,10 @@
             }
             
             const historyItems = history.map(item => `
-                <div class="history-item" data-id="${item.id}">
-                    <p>${item.sanitized.substring(0, 100)}${item.sanitized.length > 100 ? '...' : ''}</p>
+                <div class="history-item" data-id="${Number(item.id)}">
+                    <p>${MsgSentinel.escapeHtml(item.sanitized.substring(0, 100))}${item.sanitized.length > 100 ? '...' : ''}</p>
                     <div class="history-time">
-                        ${item.date} at ${item.time} • ${item.filteredCount} filtered item${item.filteredCount !== 1 ? 's' : ''}
+                        ${MsgSentinel.escapeHtml(item.date)} at ${MsgSentinel.escapeHtml(item.time)} • ${Number(item.filteredCount)} filtered item${item.filteredCount !== 1 ? 's' : ''}
                     </div>
                 </div>
             `).join('');
@@ -724,10 +690,11 @@
                         document.querySelector('.tab[data-tab="sanitize"]').click();
                         
                         // Fill in the input and show the result
-                        inputMessage.value = historyItem.original;
-                        resultElement.innerHTML = `<p>${historyItem.sanitized}</p>`;
+                        inputMessage.value = historyItem.sanitized;
+                        sanitizedText = historyItem.sanitized;
+                        renderResult(MsgSentinel.escapeHtml(historyItem.sanitized));
                         filteredCountElement.textContent = `${historyItem.filteredCount} words filtered`;
-                        updateSafetyLevel(historyItem.filteredCount, historyItem.original.length);
+                        updateSafetyLevel(historyItem.filteredCount, historyItem.sanitized.length);
                         
                         // Scroll to top
                         window.scrollTo(0, 0);
@@ -758,13 +725,18 @@
         
         // Load settings from localStorage
         function loadSettings() {
-            const settings = JSON.parse(localStorage.getItem('msgSentinelSettings') || '{}');
+            let settings = {};
+            try {
+                settings = JSON.parse(localStorage.getItem('msgSentinelSettings') || '{}') || {};
+            } catch (e) {
+                settings = {};
+            }
             
             // Apply saved settings or use defaults
             profanityFilter.checked = settings.profanityFilter !== undefined ? settings.profanityFilter : true;
             threatFilter.checked = settings.threatFilter !== undefined ? settings.threatFilter : true;
             personalAttackFilter.checked = settings.personalAttackFilter !== undefined ? settings.personalAttackFilter : true;
-            saveHistory.checked = settings.saveHistory !== undefined ? settings.saveHistory : true;
+            saveHistory.checked = settings.saveHistory === true;
         }
         
         // Initialize the app when the DOM is loaded
