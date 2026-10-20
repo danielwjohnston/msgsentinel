@@ -42,7 +42,7 @@ No build step. Open `index.html` in a browser.
 
 ### Hosting
 
-Served with GitHub Pages from the `main` branch root (Settings → Pages).
+Pushes to `main` deploy to GitHub Pages via `.github/workflows/pages.yml` (Settings → Pages → Source: GitHub Actions).
 
 ### Tests
 
